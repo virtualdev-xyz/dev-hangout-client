@@ -1,4 +1,6 @@
 import { Direction, CharacterState } from '../systems/rendering/sprites/CharacterSprite';
+import { Entity } from '../systems/entities/EntityRegistry';
+import { Relationship } from '../systems/entities/EntityRelationship';
 
 export interface Position {
   x: number;
@@ -50,5 +52,9 @@ export interface GameState {
     isInteracting: boolean;
     nearbyInteractableId: string | null;
     position: Position;
+  };
+  entityRegistry: {
+    entities: Map<string, Entity>;
+    relationships: Map<string, Relationship[]>;
   };
 } 
