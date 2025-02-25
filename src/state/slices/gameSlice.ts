@@ -1,5 +1,6 @@
 import { createSlice, createEntityAdapter, PayloadAction } from '@reduxjs/toolkit';
 import { Character, InteractableEntity, GameState, Position } from '../types';
+import { EntityRegistry } from '../../systems/entities/EntityRegistry';
 
 const charactersAdapter = createEntityAdapter<Character>();
 const interactablesAdapter = createEntityAdapter<InteractableEntity>();
@@ -11,7 +12,8 @@ const initialState: GameState = {
     characterId: null,
     isInteracting: false,
     nearbyInteractableId: null
-  }
+  },
+  entityRegistry: new EntityRegistry()
 };
 
 export const gameSlice = createSlice({
@@ -54,6 +56,18 @@ export const gameSlice = createSlice({
     },
     setInteracting: (state, action: PayloadAction<boolean>) => {
       state.player.isInteracting = action.payload;
+    },
+    registerEntity: (state, action: PayloadAction<Entity>) => {
+      state.entityRegistry.register(action.payload);
+    },
+    addEntityRelationship: (state, action: PayloadAction<{
+      sourceId: string;
+      targetId: string;
+      type: RelationType;
+      metadata?: Record<string, any>;
+    }>) => {
+      const { sourceId, targetId, type, metadata } = action.payload;
+      state.entityRegistry.addRelationship(sourceId, targetId, type, metadata);
     }
   }
 });
@@ -88,7 +102,9 @@ export const {
   addInteractable,
   setPlayerCharacter,
   setNearbyInteractable,
-  setInteracting
+  setInteracting,
+  registerEntity,
+  addEntityRelationship
 } = gameSlice.actions;
 
 export const gameReducer = gameSlice.reducer; 
