@@ -4,6 +4,7 @@ import { CharacterCustomization, ColorPalette } from './CharacterCustomization';
 import { NameTag, NameTagConfig } from '../ui/NameTag';
 import { KeyboardController, InputState } from '../../input/KeyboardController';
 import { GridMovement, MovementConfig } from '../../movement/GridMovement';
+import { InteractionManager, Interactable } from '../../interaction/InteractionManager';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export type CharacterState = 'idle' | 'walk' | 'action';
@@ -27,6 +28,9 @@ export class CharacterSprite {
   private keyboardController: KeyboardController;
   private readonly MOVEMENT_SPEED = 3;
   private gridMovement: GridMovement;
+  private interactionManager: InteractionManager | null = null;
+  private nearbyInteractable: Interactable | null = null;
+  private interactionPrompt: NameTag | null = null;
 
   constructor(
     context: CanvasRenderingContext2D,
@@ -34,7 +38,8 @@ export class CharacterSprite {
     private animations: CharacterAnimations,
     defaultPalette: ColorPalette,
     nameTagConfig?: NameTagConfig,
-    movementConfig?: MovementConfig
+    movementConfig?: MovementConfig,
+    interactionManager?: InteractionManager
   ) {
     const config: SpriteSheetConfig = {
       imageUrl,
@@ -63,6 +68,15 @@ export class CharacterSprite {
     this.keyboardController = new KeyboardController();
 
     this.gridMovement = new GridMovement(movementConfig);
+
+    this.interactionManager = interactionManager || null;
+    if (this.interactionManager) {
+      this.interactionPrompt = new NameTag({
+        text: 'Press Space to interact',
+        color: '#FFFF00',
+        offset: { x: 0, y: -48 }
+      });
+    }
   }
 
   setVelocity(x: number, y: number): void {
@@ -167,9 +181,17 @@ export class CharacterSprite {
     this.x = worldPos.x;
     this.y = worldPos.y;
 
-    // Handle action button
-    if (input.action) {
-      this.performAction();
+    // Check for nearby interactables
+    if (this.interactionManager) {
+      this.nearbyInteractable = this.interactionManager.findInteractableInRange(
+        worldPos.x,
+        worldPos.y
+      );
+
+      // Handle interaction
+      if (input.action && this.nearbyInteractable) {
+        this.nearbyInteractable.onInteract();
+      }
     }
   }
 
@@ -196,6 +218,18 @@ export class CharacterSprite {
 
     if (this.nameTag) {
       this.nameTag.draw(this.spriteSheet.getContext(), x + this.FRAME_SIZE/2, y);
+    }
+
+    // Draw interaction prompt if near an interactable
+    if (this.nearbyInteractable && this.interactionPrompt) {
+      const prompt = this.nearbyInteractable.getInteractionPrompt?.() || 
+                    'Press Space to interact';
+      this.interactionPrompt.setText(prompt);
+      this.interactionPrompt.draw(
+        this.spriteSheet.getContext(),
+        x + this.FRAME_SIZE/2,
+        y
+      );
     }
   }
 
