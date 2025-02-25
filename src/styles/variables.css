@@ -1,0 +1,12 @@
+:root {
+  --crt-blue: #00FFFF;
+  --magenta: #FF00FF;
+  --neon-green: #00FF00;
+  --bit-yellow: #FFFF00;
+  --digital-red: #FF0000;
+  --space-black: #0A0A1F;
+  --terminal-green: #001100;
+  
+  --pixel-border: 4px solid;
+  --font-retro: 'Press Start 2P', monospace;
+} 
