@@ -224,4 +224,8 @@ export class CharacterSprite {
     this.x = x;
     this.y = y;
   }
+
+  handleClick(x: number, y: number): void {
+    this.gridMovement.followPath(x, y);
+  }
 } 

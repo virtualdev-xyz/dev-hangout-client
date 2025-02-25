@@ -1,4 +1,5 @@
 import { CollisionMap } from '../collision/CollisionMap';
+import { PathFinder } from '../pathfinding/PathFinder';
 
 export interface GridPosition {
   x: number;
@@ -18,6 +19,8 @@ export class GridMovement {
   private movementProgress: number = 0;
   private isMoving: boolean = false;
   private collisionMap: CollisionMap | null = null;
+  private pathFinder: PathFinder | null = null;
+  private currentPath: { x: number; y: number }[] = [];
 
   constructor(
     private config: MovementConfig = {
@@ -43,6 +46,10 @@ export class GridMovement {
 
   setCollisionMap(map: CollisionMap): void {
     this.collisionMap = map;
+  }
+
+  setPathFinder(pathFinder: PathFinder): void {
+    this.pathFinder = pathFinder;
   }
 
   private canMoveTo(target: GridPosition): boolean {
@@ -98,7 +105,42 @@ export class GridMovement {
     return true;
   }
 
+  followPath(targetX: number, targetY: number): boolean {
+    if (!this.pathFinder || this.isMoving) return false;
+
+    const path = this.pathFinder.findPath(
+      this.currentPosition.x,
+      this.currentPosition.y,
+      targetX,
+      targetY
+    );
+
+    if (path.length > 0) {
+      this.currentPath = path;
+      return this.moveToNextPathPoint();
+    }
+
+    return false;
+  }
+
+  private moveToNextPathPoint(): boolean {
+    if (this.currentPath.length === 0) return false;
+
+    const nextPoint = this.currentPath[0];
+    const moved = this.moveTo(nextPoint);
+
+    if (moved) {
+      this.currentPath.shift();
+    }
+
+    return moved;
+  }
+
   update(deltaTime: number): void {
+    if (!this.isMoving && this.currentPath.length > 0) {
+      this.moveToNextPathPoint();
+    }
+
     if (!this.isMoving || !this.targetPosition) return;
 
     this.movementProgress += deltaTime / this.config.movementDuration;
