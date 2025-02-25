@@ -49,5 +49,6 @@ export interface GameState {
     characterId: string | null;
     isInteracting: boolean;
     nearbyInteractableId: string | null;
+    position: Position;
   };
 } 
