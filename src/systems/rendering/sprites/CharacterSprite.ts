@@ -5,6 +5,13 @@ import { NameTag, NameTagConfig } from '../ui/NameTag';
 import { KeyboardController, InputState } from '../../input/KeyboardController';
 import { GridMovement, MovementConfig } from '../../movement/GridMovement';
 import { InteractionManager, Interactable } from '../../interaction/InteractionManager';
+import { useDispatch, useSelector } from 'react-redux';
+import { 
+  updateCharacterPosition,
+  updateCharacterState,
+  setNearbyInteractable
+} from '../../../state/slices/gameSlice';
+import { AppDispatch } from '../../../state/store';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export type CharacterState = 'idle' | 'walk' | 'action';
@@ -31,6 +38,8 @@ export class CharacterSprite {
   private interactionManager: InteractionManager | null = null;
   private nearbyInteractable: Interactable | null = null;
   private interactionPrompt: NameTag | null = null;
+  private dispatch: AppDispatch;
+  private id: string;
 
   constructor(
     context: CanvasRenderingContext2D,
@@ -39,7 +48,9 @@ export class CharacterSprite {
     defaultPalette: ColorPalette,
     nameTagConfig?: NameTagConfig,
     movementConfig?: MovementConfig,
-    interactionManager?: InteractionManager
+    interactionManager?: InteractionManager,
+    id: string,
+    dispatch: AppDispatch
   ) {
     const config: SpriteSheetConfig = {
       imageUrl,
@@ -77,6 +88,9 @@ export class CharacterSprite {
         offset: { x: 0, y: -48 }
       });
     }
+
+    this.id = id;
+    this.dispatch = dispatch;
   }
 
   setVelocity(x: number, y: number): void {
@@ -181,17 +195,26 @@ export class CharacterSprite {
     this.x = worldPos.x;
     this.y = worldPos.y;
 
-    // Check for nearby interactables
+    // Update position in Redux store
+    this.dispatch(updateCharacterPosition({
+      id: this.id,
+      position: { x: worldPos.x, y: worldPos.y }
+    }));
+
+    // Update state and direction in Redux store
+    this.dispatch(updateCharacterState({
+      id: this.id,
+      state: this.currentState,
+      direction: this.currentDirection
+    }));
+
+    // Update nearby interactable in Redux store
     if (this.interactionManager) {
-      this.nearbyInteractable = this.interactionManager.findInteractableInRange(
+      const nearby = this.interactionManager.findInteractableInRange(
         worldPos.x,
         worldPos.y
       );
-
-      // Handle interaction
-      if (input.action && this.nearbyInteractable) {
-        this.nearbyInteractable.onInteract();
-      }
+      this.dispatch(setNearbyInteractable(nearby?.id || null));
     }
   }
 
