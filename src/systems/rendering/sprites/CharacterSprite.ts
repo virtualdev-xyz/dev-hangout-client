@@ -1,6 +1,7 @@
 import { SpriteSheet, SpriteSheetConfig } from '../SpriteSheet';
 import { AnimationController, Animation } from '../../animation/AnimationController';
 import { CharacterCustomization, ColorPalette } from './CharacterCustomization';
+import { NameTag, NameTagConfig } from '../ui/NameTag';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export type CharacterState = 'idle' | 'walk' | 'action';
@@ -20,12 +21,14 @@ export class CharacterSprite {
   private currentState: CharacterState = 'idle';
   private velocity: { x: number; y: number } = { x: 0, y: 0 };
   private customization: CharacterCustomization;
+  private nameTag: NameTag | null = null;
 
   constructor(
     context: CanvasRenderingContext2D,
     imageUrl: string,
     private animations: CharacterAnimations,
-    defaultPalette: ColorPalette
+    defaultPalette: ColorPalette,
+    nameTagConfig?: NameTagConfig
   ) {
     const config: SpriteSheetConfig = {
       imageUrl,
@@ -46,6 +49,10 @@ export class CharacterSprite {
     this.customization.loadBaseSprite(imageUrl).then(() => {
       this.customization.updatePalette(defaultPalette);
     });
+
+    if (nameTagConfig) {
+      this.nameTag = new NameTag(nameTagConfig);
+    }
   }
 
   setVelocity(x: number, y: number): void {
@@ -134,6 +141,10 @@ export class CharacterSprite {
       x,
       y
     );
+
+    if (this.nameTag) {
+      this.nameTag.draw(this.spriteSheet.getContext(), x + this.FRAME_SIZE/2, y);
+    }
   }
 
   getCurrentDirection(): Direction {
@@ -142,5 +153,13 @@ export class CharacterSprite {
 
   getCurrentState(): CharacterState {
     return this.currentState;
+  }
+
+  setNameTag(config: NameTagConfig): void {
+    this.nameTag = new NameTag(config);
+  }
+
+  setStatus(status: StatusIndicator | null): void {
+    this.nameTag?.setStatus(status);
   }
 } 
