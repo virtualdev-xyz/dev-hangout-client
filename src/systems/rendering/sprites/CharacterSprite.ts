@@ -2,6 +2,7 @@ import { SpriteSheet, SpriteSheetConfig } from '../SpriteSheet';
 import { AnimationController, Animation } from '../../animation/AnimationController';
 import { CharacterCustomization, ColorPalette } from './CharacterCustomization';
 import { NameTag, NameTagConfig } from '../ui/NameTag';
+import { KeyboardController, InputState } from '../../input/KeyboardController';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export type CharacterState = 'idle' | 'walk' | 'action';
@@ -22,6 +23,8 @@ export class CharacterSprite {
   private velocity: { x: number; y: number } = { x: 0, y: 0 };
   private customization: CharacterCustomization;
   private nameTag: NameTag | null = null;
+  private keyboardController: KeyboardController;
+  private readonly MOVEMENT_SPEED = 3;
 
   constructor(
     context: CanvasRenderingContext2D,
@@ -53,6 +56,8 @@ export class CharacterSprite {
     if (nameTagConfig) {
       this.nameTag = new NameTag(nameTagConfig);
     }
+
+    this.keyboardController = new KeyboardController();
   }
 
   setVelocity(x: number, y: number): void {
@@ -124,7 +129,32 @@ export class CharacterSprite {
   }
 
   update(deltaTime: number): void {
+    // Update animation
     this.animationController?.update(deltaTime);
+
+    // Update movement based on input
+    const input = this.keyboardController.getInputState();
+    this.handleInput(input, deltaTime);
+  }
+
+  private handleInput(input: InputState, deltaTime: number): void {
+    // Calculate movement
+    const dx = input.horizontal * this.MOVEMENT_SPEED * (deltaTime / 1000);
+    const dy = input.vertical * this.MOVEMENT_SPEED * (deltaTime / 1000);
+
+    // Update velocity for animation state
+    this.setVelocity(dx, dy);
+
+    // Handle action button
+    if (input.action) {
+      this.performAction();
+    }
+  }
+
+  private performAction(): void {
+    if (this.currentState !== 'action') {
+      this.setAnimation('action', this.currentDirection);
+    }
   }
 
   updateColors(newPalette: Partial<ColorPalette>): void {
@@ -161,5 +191,9 @@ export class CharacterSprite {
 
   setStatus(status: StatusIndicator | null): void {
     this.nameTag?.setStatus(status);
+  }
+
+  cleanup(): void {
+    this.keyboardController.cleanup();
   }
 } 
