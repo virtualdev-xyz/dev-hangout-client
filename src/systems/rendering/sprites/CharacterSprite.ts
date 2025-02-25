@@ -3,6 +3,7 @@ import { AnimationController, Animation } from '../../animation/AnimationControl
 import { CharacterCustomization, ColorPalette } from './CharacterCustomization';
 import { NameTag, NameTagConfig } from '../ui/NameTag';
 import { KeyboardController, InputState } from '../../input/KeyboardController';
+import { GridMovement, MovementConfig } from '../../movement/GridMovement';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export type CharacterState = 'idle' | 'walk' | 'action';
@@ -25,13 +26,15 @@ export class CharacterSprite {
   private nameTag: NameTag | null = null;
   private keyboardController: KeyboardController;
   private readonly MOVEMENT_SPEED = 3;
+  private gridMovement: GridMovement;
 
   constructor(
     context: CanvasRenderingContext2D,
     imageUrl: string,
     private animations: CharacterAnimations,
     defaultPalette: ColorPalette,
-    nameTagConfig?: NameTagConfig
+    nameTagConfig?: NameTagConfig,
+    movementConfig?: MovementConfig
   ) {
     const config: SpriteSheetConfig = {
       imageUrl,
@@ -58,6 +61,8 @@ export class CharacterSprite {
     }
 
     this.keyboardController = new KeyboardController();
+
+    this.gridMovement = new GridMovement(movementConfig);
   }
 
   setVelocity(x: number, y: number): void {
@@ -138,12 +143,29 @@ export class CharacterSprite {
   }
 
   private handleInput(input: InputState, deltaTime: number): void {
-    // Calculate movement
-    const dx = input.horizontal * this.MOVEMENT_SPEED * (deltaTime / 1000);
-    const dy = input.vertical * this.MOVEMENT_SPEED * (deltaTime / 1000);
+    // Only try to move if not already moving
+    if (!this.gridMovement.isMovementInProgress()) {
+      const moved = this.gridMovement.moveInDirection(
+        input.horizontal,
+        input.vertical
+      );
 
-    // Update velocity for animation state
-    this.setVelocity(dx, dy);
+      if (moved) {
+        // Update animation state based on movement direction
+        this.setVelocity(input.horizontal, input.vertical);
+      } else {
+        // No movement, return to idle
+        this.setVelocity(0, 0);
+      }
+    }
+
+    // Update grid movement
+    this.gridMovement.update(deltaTime);
+
+    // Get interpolated position
+    const worldPos = this.gridMovement.getWorldPosition();
+    this.x = worldPos.x;
+    this.y = worldPos.y;
 
     // Handle action button
     if (input.action) {
@@ -195,5 +217,11 @@ export class CharacterSprite {
 
   cleanup(): void {
     this.keyboardController.cleanup();
+  }
+
+  setPosition(x: number, y: number): void {
+    this.gridMovement.setPosition(x, y);
+    this.x = x;
+    this.y = y;
   }
 } 
