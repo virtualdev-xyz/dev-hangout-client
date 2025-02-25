@@ -1,5 +1,6 @@
 import { SpriteSheet, SpriteSheetConfig } from '../SpriteSheet';
 import { AnimationController, Animation } from '../../animation/AnimationController';
+import { CharacterCustomization, ColorPalette } from './CharacterCustomization';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export type CharacterState = 'idle' | 'walk' | 'action';
@@ -18,11 +19,13 @@ export class CharacterSprite {
   private currentDirection: Direction = 'down';
   private currentState: CharacterState = 'idle';
   private velocity: { x: number; y: number } = { x: 0, y: 0 };
+  private customization: CharacterCustomization;
 
   constructor(
     context: CanvasRenderingContext2D,
     imageUrl: string,
-    private animations: CharacterAnimations
+    private animations: CharacterAnimations,
+    defaultPalette: ColorPalette
   ) {
     const config: SpriteSheetConfig = {
       imageUrl,
@@ -33,6 +36,16 @@ export class CharacterSprite {
 
     this.spriteSheet = new SpriteSheet(config, context);
     this.setAnimation('idle', 'down');
+
+    this.customization = new CharacterCustomization(
+      this.FRAME_SIZE * 8, // Full spritesheet width
+      this.FRAME_SIZE * 4, // Full spritesheet height
+      defaultPalette
+    );
+    
+    this.customization.loadBaseSprite(imageUrl).then(() => {
+      this.customization.updatePalette(defaultPalette);
+    });
   }
 
   setVelocity(x: number, y: number): void {
@@ -107,8 +120,13 @@ export class CharacterSprite {
     this.animationController?.update(deltaTime);
   }
 
+  updateColors(newPalette: Partial<ColorPalette>): void {
+    this.customization.updatePalette(newPalette);
+  }
+
   draw(x: number, y: number): void {
-    this.spriteSheet.drawFrame(
+    this.customization.drawCustomizedSprite(
+      this.spriteSheet.getContext(),
       this.currentFrame.x,
       this.currentFrame.y,
       this.FRAME_SIZE,
