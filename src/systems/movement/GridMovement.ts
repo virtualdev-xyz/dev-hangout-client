@@ -1,3 +1,5 @@
+import { CollisionMap } from '../collision/CollisionMap';
+
 export interface GridPosition {
   x: number;
   y: number;
@@ -7,6 +9,7 @@ export interface MovementConfig {
   gridSize: number;
   movementDuration: number;  // Time to move one grid space in ms
   enableDiagonal: boolean;
+  collisionMap?: CollisionMap;
 }
 
 export class GridMovement {
@@ -14,6 +17,7 @@ export class GridMovement {
   private targetPosition: GridPosition | null = null;
   private movementProgress: number = 0;
   private isMoving: boolean = false;
+  private collisionMap: CollisionMap | null = null;
 
   constructor(
     private config: MovementConfig = {
@@ -23,6 +27,7 @@ export class GridMovement {
     }
   ) {
     this.currentPosition = { x: 0, y: 0 };
+    this.collisionMap = config.collisionMap || null;
   }
 
   setPosition(x: number, y: number): void {
@@ -34,6 +39,16 @@ export class GridMovement {
     this.targetPosition = null;
     this.movementProgress = 0;
     this.isMoving = false;
+  }
+
+  setCollisionMap(map: CollisionMap): void {
+    this.collisionMap = map;
+  }
+
+  private canMoveTo(target: GridPosition): boolean {
+    if (!this.collisionMap) return true;
+
+    return !this.collisionMap.isBlocked(target.x, target.y);
   }
 
   moveInDirection(dx: number, dy: number): boolean {
@@ -65,6 +80,11 @@ export class GridMovement {
       x: Math.round(target.x / this.config.gridSize) * this.config.gridSize,
       y: Math.round(target.y / this.config.gridSize) * this.config.gridSize
     };
+
+    // Check collision
+    if (!this.canMoveTo(snappedTarget)) {
+      return false;
+    }
 
     // Don't start movement if already at target
     if (snappedTarget.x === this.currentPosition.x && 
