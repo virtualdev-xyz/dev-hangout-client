@@ -18,9 +18,7 @@ export class AssetManager {
     this.isLoading = true;
 
     try {
-      await Promise.all(
-        this.loadQueue.map(config => this.loader.loadAsset(config))
-      );
+      await Promise.all(this.loadQueue.map(config => this.loader.loadAsset(config)));
       this.loadQueue = [];
     } finally {
       this.isLoading = false;
@@ -30,4 +28,4 @@ export class AssetManager {
   getAsset<T>(id: string): T | undefined {
     return this.loader.getAsset<T>(id);
   }
-} 
+}

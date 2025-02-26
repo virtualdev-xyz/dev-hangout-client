@@ -5,7 +5,7 @@ export const arrowControls: KeyMap = {
   down: 'ArrowDown',
   left: 'ArrowLeft',
   right: 'ArrowRight',
-  action: 'Space'
+  action: 'Space',
 };
 
 export const wasdControls: KeyMap = {
@@ -13,5 +13,5 @@ export const wasdControls: KeyMap = {
   down: 'KeyS',
   left: 'KeyA',
   right: 'KeyD',
-  action: 'Space'
-}; 
+  action: 'Space',
+};

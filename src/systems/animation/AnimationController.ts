@@ -59,4 +59,4 @@ export class AnimationController {
     this.isPlaying = true;
     this.onFrame(this.animation.frames[0]);
   }
-} 
+}

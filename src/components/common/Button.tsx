@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const Button = styled.button`
   font-family: ${props => props.theme.fonts.heading};
@@ -7,4 +7,4 @@ export const Button = styled.button`
   background-color: ${props => props.theme.colors.terminalGreen};
   color: ${props => props.theme.colors.neonGreen};
   cursor: pointer;
-` 
+`;

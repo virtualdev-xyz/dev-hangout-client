@@ -10,22 +10,20 @@ export const selectInteractables = (state: RootState) => state.game.interactable
 export const selectPlayer = (state: RootState) => state.game.player;
 
 // Derived selectors
-export const selectActiveCharacters = createSelector(
-  selectCharacters,
-  (characters): Character[] => 
-    Object.values(characters).filter(char => char.state !== 'inactive')
+export const selectActiveCharacters = createSelector(selectCharacters, (characters): Character[] =>
+  Object.values(characters).filter(char => char.state !== 'inactive')
 );
 
 export const selectNearbyEntities = createSelector(
   [selectCharacters, selectInteractables, selectPlayer],
   (characters, interactables, player): (Character | InteractableEntity)[] => {
     if (!player.characterId) return [];
-    
+
     const playerChar = characters[player.characterId];
     if (!playerChar) return [];
 
     const NEARBY_RADIUS = 100; // Configurable radius
-    
+
     const isNearby = (pos: Position) => {
       const dx = pos.x - playerChar.position.x;
       const dy = pos.y - playerChar.position.y;
@@ -33,10 +31,10 @@ export const selectNearbyEntities = createSelector(
     };
 
     return [
-      ...Object.values(characters)
-        .filter(char => char.id !== player.characterId && isNearby(char.position)),
-      ...Object.values(interactables)
-        .filter(obj => isNearby(obj.position))
+      ...Object.values(characters).filter(
+        char => char.id !== player.characterId && isNearby(char.position)
+      ),
+      ...Object.values(interactables).filter(obj => isNearby(obj.position)),
     ];
   }
 );
@@ -48,7 +46,7 @@ export const selectEntityRelationships = createSelector(
     return {
       owned: registry.getRelatedEntities(entityId, 'owns'),
       following: registry.getRelatedEntities(entityId, 'follows'),
-      interactable: registry.getRelatedEntities(entityId, 'interacts')
+      interactable: registry.getRelatedEntities(entityId, 'interacts'),
     };
   }
 );
@@ -63,12 +61,11 @@ export const selectInteractablesByDistance = createSelector(
   (interactables, player): InteractableEntity[] => {
     if (!player.characterId) return [];
 
-    return Object.values(interactables)
-      .sort((a, b) => {
-        const distA = getDistanceToPlayer(a.position, player);
-        const distB = getDistanceToPlayer(b.position, player);
-        return distA - distB;
-      });
+    return Object.values(interactables).sort((a, b) => {
+      const distA = getDistanceToPlayer(a.position, player);
+      const distB = getDistanceToPlayer(b.position, player);
+      return distA - distB;
+    });
   }
 );
 
@@ -89,10 +86,10 @@ export const selectInteractionChain = createSelector(
     while (true) {
       const triggers = gameState.entityRegistry.getRelatedEntities(currentId, 'triggers');
       if (triggers.length === 0) break;
-      
+
       currentId = triggers[0];
       if (chain.includes(currentId)) break; // Prevent infinite loops
-      
+
       chain.push(currentId);
     }
 
@@ -103,8 +100,8 @@ export const selectInteractionChain = createSelector(
 // Helper function for distance calculations
 const getDistanceToPlayer = (position: Position, player: GameState['player']): number => {
   if (!player.characterId) return Infinity;
-  
+
   const dx = position.x - player.position.x;
   const dy = position.y - player.position.y;
   return Math.sqrt(dx * dx + dy * dy);
-}; 
+};

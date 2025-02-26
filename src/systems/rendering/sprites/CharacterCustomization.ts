@@ -12,8 +12,8 @@ export interface Accessory {
   spriteY: number;
   width: number;
   height: number;
-  layer: 'behind' | 'front';  // Layer order relative to character
-  offset: { x: number; y: number };  // Position offset from character
+  layer: 'behind' | 'front'; // Layer order relative to character
+  offset: { x: number; y: number }; // Position offset from character
 }
 
 export class CharacterCustomization {
@@ -57,11 +57,11 @@ export class CharacterCustomization {
 
     // Color mapping (example values, adjust based on your sprite)
     const colorMap = {
-      '#FF0000': newPalette.shirt || this.defaultPalette.shirt,    // Red pixels to shirt color
-      '#00FF00': newPalette.pants || this.defaultPalette.pants,    // Green pixels to pants color
-      '#0000FF': newPalette.hair || this.defaultPalette.hair,      // Blue pixels to hair color
-      '#FFFF00': newPalette.skin || this.defaultPalette.skin,      // Yellow pixels to skin color
-      '#FF00FF': newPalette.shoes || this.defaultPalette.shoes     // Magenta pixels to shoes color
+      '#FF0000': newPalette.shirt || this.defaultPalette.shirt, // Red pixels to shirt color
+      '#00FF00': newPalette.pants || this.defaultPalette.pants, // Green pixels to pants color
+      '#0000FF': newPalette.hair || this.defaultPalette.hair, // Blue pixels to hair color
+      '#FFFF00': newPalette.skin || this.defaultPalette.skin, // Yellow pixels to skin color
+      '#FF00FF': newPalette.shoes || this.defaultPalette.shoes, // Magenta pixels to shoes color
     };
 
     // Replace colors
@@ -108,17 +108,7 @@ export class CharacterCustomization {
     });
 
     // Draw color-swapped character
-    ctx.drawImage(
-      this.colorCanvas,
-      spriteX,
-      spriteY,
-      width,
-      height,
-      x,
-      y,
-      width,
-      height
-    );
+    ctx.drawImage(this.colorCanvas, spriteX, spriteY, width, height, x, y, width, height);
 
     // Draw front-layer accessories
     this.accessories.forEach(acc => {
@@ -149,10 +139,12 @@ export class CharacterCustomization {
 
   private hexToRgb(hex: string): { r: number; g: number; b: number } {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : { r: 0, g: 0, b: 0 };
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : { r: 0, g: 0, b: 0 };
   }
-} 
+}

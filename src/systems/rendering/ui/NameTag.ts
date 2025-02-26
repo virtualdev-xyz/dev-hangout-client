@@ -22,7 +22,7 @@ export class NameTag {
     font: 'Press Start 2P',
     fontSize: 12,
     padding: 4,
-    offset: { x: 0, y: -32 }
+    offset: { x: 0, y: -32 },
   };
 
   private config: Required<NameTagConfig>;
@@ -46,12 +46,13 @@ export class NameTag {
   }
 
   draw(ctx: CanvasRenderingContext2D, x: number, y: number): void {
-    const { text, color, backgroundColor, borderColor, fontSize, font, padding, offset } = this.config;
+    const { text, color, backgroundColor, borderColor, fontSize, font, padding, offset } =
+      this.config;
 
     // Calculate position
-    const tagWidth = this.cachedWidth + (padding * 2);
-    const tagHeight = fontSize + (padding * 2);
-    const tagX = x + offset.x - (tagWidth / 2);
+    const tagWidth = this.cachedWidth + padding * 2;
+    const tagHeight = fontSize + padding * 2;
+    const tagX = x + offset.x - tagWidth / 2;
     const tagY = y + offset.y;
 
     // Save context state
@@ -70,11 +71,11 @@ export class NameTag {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = color;
-    ctx.fillText(text, tagX + (tagWidth / 2), tagY + (tagHeight / 2));
+    ctx.fillText(text, tagX + tagWidth / 2, tagY + tagHeight / 2);
 
     // Draw status indicator if present
     if (this.statusIndicator) {
-      this.drawStatusIndicator(ctx, tagX + tagWidth + 4, tagY + (tagHeight / 2));
+      this.drawStatusIndicator(ctx, tagX + tagWidth + 4, tagY + tagHeight / 2);
     }
 
     // Restore context state
@@ -85,7 +86,8 @@ export class NameTag {
     if (!this.statusIndicator) return;
 
     const radius = 4;
-    const color = this.statusIndicator.customColor || this.getStatusColor(this.statusIndicator.type);
+    const color =
+      this.statusIndicator.customColor || this.getStatusColor(this.statusIndicator.type);
 
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
@@ -118,10 +120,14 @@ export class NameTag {
 
   private getStatusColor(status: StatusIndicator['type']): string {
     switch (status) {
-      case 'online': return '#00FF00';
-      case 'away': return '#FFFF00';
-      case 'busy': return '#FF0000';
-      case 'offline': return '#808080';
+      case 'online':
+        return '#00FF00';
+      case 'away':
+        return '#FFFF00';
+      case 'busy':
+        return '#FF0000';
+      case 'offline':
+        return '#808080';
     }
   }
 
@@ -133,4 +139,4 @@ export class NameTag {
   setColor(color: string): void {
     this.config.color = color;
   }
-} 
+}

@@ -3,29 +3,24 @@ import { CollisionMap } from '../collision/CollisionMap';
 interface Node {
   x: number;
   y: number;
-  f: number;  // Total cost (g + h)
-  g: number;  // Cost from start
-  h: number;  // Heuristic (estimated cost to goal)
+  f: number; // Total cost (g + h)
+  g: number; // Cost from start
+  h: number; // Heuristic (estimated cost to goal)
   parent: Node | null;
 }
 
 export class PathFinder {
   constructor(private collisionMap: CollisionMap) {}
 
-  findPath(
-    startX: number,
-    startY: number,
-    endX: number,
-    endY: number
-  ): { x: number; y: number }[] {
+  findPath(startX: number, startY: number, endX: number, endY: number): { x: number; y: number }[] {
     // Convert world coordinates to grid coordinates
     const gridStart = {
       x: Math.floor(startX / this.collisionMap.getGridSize()),
-      y: Math.floor(startY / this.collisionMap.getGridSize())
+      y: Math.floor(startY / this.collisionMap.getGridSize()),
     };
     const gridEnd = {
       x: Math.floor(endX / this.collisionMap.getGridSize()),
-      y: Math.floor(endY / this.collisionMap.getGridSize())
+      y: Math.floor(endY / this.collisionMap.getGridSize()),
     };
 
     const openSet: Node[] = [];
@@ -38,14 +33,14 @@ export class PathFinder {
       f: 0,
       g: 0,
       h: this.heuristic(gridStart.x, gridStart.y, gridEnd.x, gridEnd.y),
-      parent: null
+      parent: null,
     };
     openSet.push(startNode);
 
     while (openSet.length > 0) {
       // Get node with lowest f score
       const currentNode = this.getLowestFScore(openSet);
-      
+
       // Check if we reached the end
       if (currentNode.x === gridEnd.x && currentNode.y === gridEnd.y) {
         return this.reconstructPath(currentNode);
@@ -89,17 +84,16 @@ export class PathFinder {
   }
 
   private getLowestFScore(nodes: Node[]): Node {
-    return nodes.reduce((lowest, node) => 
-      node.f < lowest.f ? node : lowest, nodes[0]);
+    return nodes.reduce((lowest, node) => (node.f < lowest.f ? node : lowest), nodes[0]);
   }
 
   private getNeighbors(node: Node): Node[] {
     const neighbors: Node[] = [];
     const directions = [
       { x: 0, y: -1 }, // Up
-      { x: 1, y: 0 },  // Right
-      { x: 0, y: 1 },  // Down
-      { x: -1, y: 0 }  // Left
+      { x: 1, y: 0 }, // Right
+      { x: 0, y: 1 }, // Down
+      { x: -1, y: 0 }, // Left
     ];
 
     for (const dir of directions) {
@@ -107,15 +101,19 @@ export class PathFinder {
       const y = node.y + dir.y;
 
       // Check if position is walkable
-      if (!this.collisionMap.isBlocked(x * this.collisionMap.getGridSize(), 
-                                     y * this.collisionMap.getGridSize())) {
+      if (
+        !this.collisionMap.isBlocked(
+          x * this.collisionMap.getGridSize(),
+          y * this.collisionMap.getGridSize()
+        )
+      ) {
         neighbors.push({
           x,
           y,
           f: 0,
           g: 0,
           h: 0,
-          parent: null
+          parent: null,
         });
       }
     }
@@ -130,11 +128,11 @@ export class PathFinder {
     while (current) {
       path.unshift({
         x: current.x * this.collisionMap.getGridSize(),
-        y: current.y * this.collisionMap.getGridSize()
+        y: current.y * this.collisionMap.getGridSize(),
       });
       current = current.parent;
     }
 
     return path;
   }
-} 
+}

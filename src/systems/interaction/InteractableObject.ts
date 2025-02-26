@@ -19,4 +19,4 @@ export class InteractableObject implements Interactable {
   getInteractionPrompt(): string {
     return this.prompt;
   }
-} 
+}

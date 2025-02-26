@@ -12,4 +12,4 @@ export const AppRoutes: React.FC = () => {
       {/* Add more routes as needed */}
     </Routes>
   );
-}; 
+};

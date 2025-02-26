@@ -26,8 +26,8 @@ export class Camera {
   update(deltaTime: number): void {
     if (this.target) {
       // Smooth camera follow
-      this.x += (this.target.x - this.width/2 - this.x) * this.SMOOTH_FACTOR;
-      this.y += (this.target.y - this.height/2 - this.y) * this.SMOOTH_FACTOR;
+      this.x += (this.target.x - this.width / 2 - this.x) * this.SMOOTH_FACTOR;
+      this.y += (this.target.y - this.height / 2 - this.y) * this.SMOOTH_FACTOR;
     }
   }
 
@@ -46,14 +46,14 @@ export class Camera {
   worldToScreen(worldX: number, worldY: number): { x: number; y: number } {
     return {
       x: (worldX - this.x) * this.zoom,
-      y: (worldY - this.y) * this.zoom
+      y: (worldY - this.y) * this.zoom,
     };
   }
 
   screenToWorld(screenX: number, screenY: number): { x: number; y: number } {
     return {
       x: screenX / this.zoom + this.x,
-      y: screenY / this.zoom + this.y
+      y: screenY / this.zoom + this.y,
     };
   }
 
@@ -66,4 +66,4 @@ export class Camera {
   restore(ctx: CanvasRenderingContext2D): void {
     ctx.restore();
   }
-} 
+}

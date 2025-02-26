@@ -1,10 +1,10 @@
-export type RelationType = 
-  | 'owns'        // Character owns item
-  | 'follows'     // Character follows another character
-  | 'interacts'   // Character can interact with object
-  | 'blocks'      // Object blocks movement
-  | 'requires'    // Object requires another object/state
-  | 'triggers';   // Object triggers another object
+export type RelationType =
+  | 'owns' // Character owns item
+  | 'follows' // Character follows another character
+  | 'interacts' // Character can interact with object
+  | 'blocks' // Object blocks movement
+  | 'requires' // Object requires another object/state
+  | 'triggers'; // Object triggers another object
 
 export interface Relationship {
   sourceId: string;
@@ -28,10 +28,8 @@ export class EntityRelationshipManager {
     const relationships = this.relationships.get(sourceId);
     if (!relationships) return;
 
-    const index = relationships.findIndex(r => 
-      r.targetId === targetId && r.type === type
-    );
-    
+    const index = relationships.findIndex(r => r.targetId === targetId && r.type === type);
+
     if (index !== -1) {
       relationships.splice(index, 1);
     }
@@ -46,21 +44,17 @@ export class EntityRelationshipManager {
     const relationships = this.relationships.get(sourceId);
     if (!relationships) return false;
 
-    return relationships.some(r => 
-      r.targetId === targetId && r.type === type
-    );
+    return relationships.some(r => r.targetId === targetId && r.type === type);
   }
 
   getRelatedEntities(sourceId: string, type: RelationType): string[] {
     const relationships = this.relationships.get(sourceId);
     if (!relationships) return [];
 
-    return relationships
-      .filter(r => r.type === type)
-      .map(r => r.targetId);
+    return relationships.filter(r => r.type === type).map(r => r.targetId);
   }
 
   clearRelationships(sourceId: string): void {
     this.relationships.delete(sourceId);
   }
-} 
+}

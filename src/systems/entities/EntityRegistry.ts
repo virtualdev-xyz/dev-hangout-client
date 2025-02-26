@@ -29,12 +29,11 @@ export class EntityRegistry {
 
   getEntity<T>(id: string): T | null {
     const entity = this.entities.get(id);
-    return entity ? entity.data as T : null;
+    return entity ? (entity.data as T) : null;
   }
 
   getEntitiesByType(type: EntityType): Entity[] {
-    return Array.from(this.entities.values())
-      .filter(entity => entity.type === type);
+    return Array.from(this.entities.values()).filter(entity => entity.type === type);
   }
 
   addRelationship(
@@ -51,7 +50,7 @@ export class EntityRegistry {
       sourceId,
       targetId,
       type,
-      metadata
+      metadata,
     });
   }
 
@@ -74,4 +73,4 @@ export class EntityRegistry {
       }
     }
   }
-} 
+}

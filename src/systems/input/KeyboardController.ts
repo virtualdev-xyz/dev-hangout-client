@@ -7,8 +7,8 @@ export type KeyMap = {
 };
 
 export interface InputState {
-  horizontal: number;  // -1 (left), 0, or 1 (right)
-  vertical: number;    // -1 (up), 0, or 1 (down)
+  horizontal: number; // -1 (left), 0, or 1 (right)
+  vertical: number; // -1 (up), 0, or 1 (down)
   action: boolean;
 }
 
@@ -17,7 +17,7 @@ export class KeyboardController {
   private inputState: InputState = {
     horizontal: 0,
     vertical: 0,
-    action: false
+    action: false,
   };
 
   constructor(
@@ -26,25 +26,25 @@ export class KeyboardController {
       down: 'ArrowDown',
       left: 'ArrowLeft',
       right: 'ArrowRight',
-      action: 'Space'
+      action: 'Space',
     }
   ) {
     this.setupListeners();
   }
 
   private setupListeners(): void {
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', e => {
       this.keys.add(e.code);
       this.updateInputState();
     });
 
-    window.addEventListener('keyup', (e) => {
+    window.addEventListener('keyup', e => {
       this.keys.delete(e.code);
       this.updateInputState();
     });
 
     // Prevent browser scrolling with arrow keys
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', e => {
       if (['ArrowUp', 'ArrowDown', 'Space'].includes(e.code)) {
         e.preventDefault();
       }
@@ -72,7 +72,7 @@ export class KeyboardController {
     this.inputState = {
       horizontal,
       vertical,
-      action: this.keys.has(this.keyMap.action)
+      action: this.keys.has(this.keyMap.action),
     };
   }
 
@@ -84,4 +84,4 @@ export class KeyboardController {
     window.removeEventListener('keydown', this.setupListeners);
     window.removeEventListener('keyup', this.setupListeners);
   }
-} 
+}

@@ -13,4 +13,4 @@ export class FadeTransition extends Transition {
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.restore();
   }
-} 
+}

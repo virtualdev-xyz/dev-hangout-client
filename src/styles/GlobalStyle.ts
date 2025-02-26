@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components'
-import { retroTheme } from './theme'
+import { createGlobalStyle } from 'styled-components';
+import { retroTheme } from './theme';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
@@ -15,6 +15,6 @@ const GlobalStyle = createGlobalStyle`
     color: ${retroTheme.colors.neonGreen};
     font-family: ${retroTheme.fonts.body};
   }
-`
+`;
 
-export default GlobalStyle 
+export default GlobalStyle;

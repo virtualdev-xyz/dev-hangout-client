@@ -1,18 +1,18 @@
-export type CollisionTile = 0 | 1;  // 0 = passable, 1 = blocked
+export type CollisionTile = 0 | 1; // 0 = passable, 1 = blocked
 
 export interface CollisionMapConfig {
   gridSize: number;
-  width: number;   // Map width in tiles
-  height: number;  // Map height in tiles
+  width: number; // Map width in tiles
+  height: number; // Map height in tiles
 }
 
 export class CollisionMap {
   private grid: CollisionTile[][];
 
   constructor(private config: CollisionMapConfig) {
-    this.grid = Array(config.height).fill(0).map(() => 
-      Array(config.width).fill(0)
-    );
+    this.grid = Array(config.height)
+      .fill(0)
+      .map(() => Array(config.width).fill(0));
   }
 
   setTile(x: number, y: number, value: CollisionTile): void {
@@ -35,13 +35,11 @@ export class CollisionMap {
   }
 
   private isValidPosition(x: number, y: number): boolean {
-    return x >= 0 && x < this.config.width && 
-           y >= 0 && y < this.config.height;
+    return x >= 0 && x < this.config.width && y >= 0 && y < this.config.height;
   }
 
   loadFromArray(data: CollisionTile[][]): void {
-    if (data.length !== this.config.height || 
-        data[0].length !== this.config.width) {
+    if (data.length !== this.config.height || data[0].length !== this.config.width) {
       throw new Error('Collision data dimensions do not match map size');
     }
     this.grid = data.map(row => [...row]);
@@ -68,4 +66,4 @@ export class CollisionMap {
 
     ctx.restore();
   }
-} 
+}

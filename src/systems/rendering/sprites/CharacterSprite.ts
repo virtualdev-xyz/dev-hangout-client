@@ -6,10 +6,10 @@ import { KeyboardController, InputState } from '../../input/KeyboardController';
 import { GridMovement, MovementConfig } from '../../movement/GridMovement';
 import { InteractionManager, Interactable } from '../../interaction/InteractionManager';
 import { useDispatch, useSelector } from 'react-redux';
-import { 
+import {
   updateCharacterPosition,
   updateCharacterState,
-  setNearbyInteractable
+  setNearbyInteractable,
 } from '../../../state/slices/gameSlice';
 import { AppDispatch } from '../../../state/store';
 
@@ -56,7 +56,7 @@ export class CharacterSprite {
       imageUrl,
       frameWidth: this.FRAME_SIZE,
       frameHeight: this.FRAME_SIZE,
-      animations: this.createAnimationFrames()
+      animations: this.createAnimationFrames(),
     };
 
     this.spriteSheet = new SpriteSheet(config, context);
@@ -67,7 +67,7 @@ export class CharacterSprite {
       this.FRAME_SIZE * 4, // Full spritesheet height
       defaultPalette
     );
-    
+
     this.customization.loadBaseSprite(imageUrl).then(() => {
       this.customization.updatePalette(defaultPalette);
     });
@@ -85,7 +85,7 @@ export class CharacterSprite {
       this.interactionPrompt = new NameTag({
         text: 'Press Space to interact',
         color: '#FFFF00',
-        offset: { x: 0, y: -48 }
+        offset: { x: 0, y: -48 },
       });
     }
 
@@ -120,7 +120,7 @@ export class CharacterSprite {
 
   private createAnimationFrames() {
     const frames: Record<string, { x: number; y: number; width: number; height: number }[]> = {};
-    
+
     // Convert animation indices to frame coordinates
     Object.entries(this.animations).forEach(([state, directions]) => {
       Object.entries(directions).forEach(([direction, frameIndices]) => {
@@ -129,7 +129,7 @@ export class CharacterSprite {
           x: (index % 8) * this.FRAME_SIZE, // 8 frames per row
           y: Math.floor(index / 8) * this.FRAME_SIZE,
           width: this.FRAME_SIZE,
-          height: this.FRAME_SIZE
+          height: this.FRAME_SIZE,
         }));
       });
     });
@@ -143,22 +143,19 @@ export class CharacterSprite {
       frames: frameIndices.map(index => ({
         duration: state === 'walk' ? 100 : 200, // Faster walk animation
         spriteX: (index % 8) * this.FRAME_SIZE,
-        spriteY: Math.floor(index / 8) * this.FRAME_SIZE
+        spriteY: Math.floor(index / 8) * this.FRAME_SIZE,
       })),
-      loop: state === 'walk' || state === 'idle'
+      loop: state === 'walk' || state === 'idle',
     };
   }
 
   setAnimation(state: CharacterState, direction: Direction): void {
     const newAnimation = this.createAnimation(state, direction);
-    
-    this.animationController = new AnimationController(
-      newAnimation,
-      frame => {
-        this.currentFrame.x = frame.spriteX;
-        this.currentFrame.y = frame.spriteY;
-      }
-    );
+
+    this.animationController = new AnimationController(newAnimation, frame => {
+      this.currentFrame.x = frame.spriteX;
+      this.currentFrame.y = frame.spriteY;
+    });
   }
 
   update(deltaTime: number): void {
@@ -173,10 +170,7 @@ export class CharacterSprite {
   private handleInput(input: InputState, deltaTime: number): void {
     // Only try to move if not already moving
     if (!this.gridMovement.isMovementInProgress()) {
-      const moved = this.gridMovement.moveInDirection(
-        input.horizontal,
-        input.vertical
-      );
+      const moved = this.gridMovement.moveInDirection(input.horizontal, input.vertical);
 
       if (moved) {
         // Update animation state based on movement direction
@@ -196,24 +190,25 @@ export class CharacterSprite {
     this.y = worldPos.y;
 
     // Update position in Redux store
-    this.dispatch(updateCharacterPosition({
-      id: this.id,
-      position: { x: worldPos.x, y: worldPos.y }
-    }));
+    this.dispatch(
+      updateCharacterPosition({
+        id: this.id,
+        position: { x: worldPos.x, y: worldPos.y },
+      })
+    );
 
     // Update state and direction in Redux store
-    this.dispatch(updateCharacterState({
-      id: this.id,
-      state: this.currentState,
-      direction: this.currentDirection
-    }));
+    this.dispatch(
+      updateCharacterState({
+        id: this.id,
+        state: this.currentState,
+        direction: this.currentDirection,
+      })
+    );
 
     // Update nearby interactable in Redux store
     if (this.interactionManager) {
-      const nearby = this.interactionManager.findInteractableInRange(
-        worldPos.x,
-        worldPos.y
-      );
+      const nearby = this.interactionManager.findInteractableInRange(worldPos.x, worldPos.y);
       this.dispatch(setNearbyInteractable(nearby?.id || null));
     }
   }
@@ -240,19 +235,14 @@ export class CharacterSprite {
     );
 
     if (this.nameTag) {
-      this.nameTag.draw(this.spriteSheet.getContext(), x + this.FRAME_SIZE/2, y);
+      this.nameTag.draw(this.spriteSheet.getContext(), x + this.FRAME_SIZE / 2, y);
     }
 
     // Draw interaction prompt if near an interactable
     if (this.nearbyInteractable && this.interactionPrompt) {
-      const prompt = this.nearbyInteractable.getInteractionPrompt?.() || 
-                    'Press Space to interact';
+      const prompt = this.nearbyInteractable.getInteractionPrompt?.() || 'Press Space to interact';
       this.interactionPrompt.setText(prompt);
-      this.interactionPrompt.draw(
-        this.spriteSheet.getContext(),
-        x + this.FRAME_SIZE/2,
-        y
-      );
+      this.interactionPrompt.draw(this.spriteSheet.getContext(), x + this.FRAME_SIZE / 2, y);
     }
   }
 
@@ -285,4 +275,4 @@ export class CharacterSprite {
   handleClick(x: number, y: number): void {
     this.gridMovement.followPath(x, y);
   }
-} 
+}

@@ -28,4 +28,4 @@ interface AuthState {
   user: User | null;
 }
 
-// Add other type definitions as needed 
+// Add other type definitions as needed

@@ -57,14 +57,9 @@ export class InteractionManager {
 
       // Draw object bounds
       ctx.strokeStyle = '#FFFF00';
-      ctx.strokeRect(
-        interactable.x,
-        interactable.y,
-        interactable.width,
-        interactable.height
-      );
+      ctx.strokeRect(interactable.x, interactable.y, interactable.width, interactable.height);
     }
 
     ctx.restore();
   }
-} 
+}

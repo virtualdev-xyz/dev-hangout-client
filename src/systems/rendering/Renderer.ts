@@ -16,7 +16,7 @@ export class Renderer {
       y: 0,
       width: context.canvas.width,
       height: context.canvas.height,
-      zoom: 1
+      zoom: 1,
     });
   }
 
@@ -29,17 +29,17 @@ export class Renderer {
     const currentTime = performance.now();
     const deltaTime = currentTime - this.lastTime;
     this.lastTime = currentTime;
-    
+
     this.accumulator += deltaTime;
-    
+
     while (this.accumulator >= this.FIXED_TIMESTEP) {
       this.update(this.FIXED_TIMESTEP);
       this.accumulator -= this.FIXED_TIMESTEP;
     }
-    
+
     const alpha = this.accumulator / this.FIXED_TIMESTEP;
     this.render(alpha);
-    
+
     requestAnimationFrame(() => this.loop());
   }
 
@@ -50,7 +50,7 @@ export class Renderer {
   private render(interpolation: number): void {
     const ctx = this.context;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    
+
     this.camera.applyToContext(ctx);
     // Render game objects here
     this.camera.restore(ctx);
@@ -66,7 +66,7 @@ export class Renderer {
   }
 
   public async transition(type: 'fade' | 'pixelate', duration: number = 500): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       switch (type) {
         case 'fade':
           this.currentTransition = new FadeTransition({ duration });
@@ -91,4 +91,4 @@ export class Renderer {
       }, 16);
     });
   }
-} 
+}

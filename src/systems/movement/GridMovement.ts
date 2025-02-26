@@ -8,7 +8,7 @@ export interface GridPosition {
 
 export interface MovementConfig {
   gridSize: number;
-  movementDuration: number;  // Time to move one grid space in ms
+  movementDuration: number; // Time to move one grid space in ms
   enableDiagonal: boolean;
   collisionMap?: CollisionMap;
 }
@@ -26,7 +26,7 @@ export class GridMovement {
     private config: MovementConfig = {
       gridSize: 32,
       movementDuration: 200,
-      enableDiagonal: false
+      enableDiagonal: false,
     }
   ) {
     this.currentPosition = { x: 0, y: 0 };
@@ -37,7 +37,7 @@ export class GridMovement {
     // Snap to grid
     this.currentPosition = {
       x: Math.round(x / this.config.gridSize) * this.config.gridSize,
-      y: Math.round(y / this.config.gridSize) * this.config.gridSize
+      y: Math.round(y / this.config.gridSize) * this.config.gridSize,
     };
     this.targetPosition = null;
     this.movementProgress = 0;
@@ -72,8 +72,8 @@ export class GridMovement {
     dy = Math.sign(dy);
 
     const newTarget = {
-      x: this.currentPosition.x + (dx * this.config.gridSize),
-      y: this.currentPosition.y + (dy * this.config.gridSize)
+      x: this.currentPosition.x + dx * this.config.gridSize,
+      y: this.currentPosition.y + dy * this.config.gridSize,
     };
 
     return this.moveTo(newTarget);
@@ -85,7 +85,7 @@ export class GridMovement {
     // Snap target to grid
     const snappedTarget = {
       x: Math.round(target.x / this.config.gridSize) * this.config.gridSize,
-      y: Math.round(target.y / this.config.gridSize) * this.config.gridSize
+      y: Math.round(target.y / this.config.gridSize) * this.config.gridSize,
     };
 
     // Check collision
@@ -94,8 +94,7 @@ export class GridMovement {
     }
 
     // Don't start movement if already at target
-    if (snappedTarget.x === this.currentPosition.x && 
-        snappedTarget.y === this.currentPosition.y) {
+    if (snappedTarget.x === this.currentPosition.x && snappedTarget.y === this.currentPosition.y) {
       return false;
     }
 
@@ -163,7 +162,7 @@ export class GridMovement {
     const progress = this.getEasedProgress();
     return {
       x: this.currentPosition.x + (this.targetPosition.x - this.currentPosition.x) * progress,
-      y: this.currentPosition.y + (this.targetPosition.y - this.currentPosition.y) * progress
+      y: this.currentPosition.y + (this.targetPosition.y - this.currentPosition.y) * progress,
     };
   }
 
@@ -180,7 +179,7 @@ export class GridMovement {
   getCurrentGridPosition(): GridPosition {
     return {
       x: Math.round(this.currentPosition.x / this.config.gridSize),
-      y: Math.round(this.currentPosition.y / this.config.gridSize)
+      y: Math.round(this.currentPosition.y / this.config.gridSize),
     };
   }
-} 
+}

@@ -25,17 +25,17 @@ export class SpriteSheet {
   ) {
     this.image = new Image();
     this.image.src = config.imageUrl;
-    this.image.onload = () => this.loaded = true;
+    this.image.onload = () => (this.loaded = true);
   }
 
   drawFrame(animationName: string, x: number, y: number): void {
     if (!this.loaded) return;
-    
+
     const frames = this.config.animations[animationName];
     if (!frames) return;
 
     const frame = frames[this.currentFrame];
-    
+
     this.context.drawImage(
       this.image,
       frame.x,
@@ -56,4 +56,4 @@ export class SpriteSheet {
       this.currentFrame = (this.currentFrame + 1) % 4; // Assuming 4 frames per animation
     }
   }
-} 
+}

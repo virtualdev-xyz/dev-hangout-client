@@ -11,4 +11,4 @@ export const networkMiddleware: Middleware<{}, RootState> = store => next => act
   }
 
   return result;
-}; 
+};

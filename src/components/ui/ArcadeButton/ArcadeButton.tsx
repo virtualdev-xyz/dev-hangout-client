@@ -12,10 +12,10 @@ export const ArcadeButton: React.FC<ArcadeButtonProps> = ({
   children,
   variant = 'primary',
   onClick,
-  disabled = false
+  disabled = false,
 }) => {
   return (
-    <button 
+    <button
       className={`${styles.arcadeButton} ${styles[variant]}`}
       onClick={onClick}
       disabled={disabled}
@@ -23,4 +23,4 @@ export const ArcadeButton: React.FC<ArcadeButtonProps> = ({
       {children}
     </button>
   );
-}; 
+};

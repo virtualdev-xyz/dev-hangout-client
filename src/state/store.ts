@@ -4,9 +4,9 @@ import { networkMiddleware } from './middleware/network';
 
 export const store = configureStore({
   reducer: {
-    game: gameReducer
+    game: gameReducer,
   },
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
@@ -14,10 +14,10 @@ export const store = configureStore({
         // Ignore these field paths in all actions
         ignoredActionPaths: ['payload.callback'],
         // Ignore these paths in the state
-        ignoredPaths: ['game.interactables.entities.*.data']
-      }
-    }).concat(networkMiddleware)
+        ignoredPaths: ['game.interactables.entities.*.data'],
+      },
+    }).concat(networkMiddleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch; 
+export type AppDispatch = typeof store.dispatch;

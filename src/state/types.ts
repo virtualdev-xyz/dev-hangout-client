@@ -21,8 +21,8 @@ export interface Character {
       shirt: string;
       pants: string;
       shoes: string;
-    }
-  }
+    };
+  };
 }
 
 export interface InteractableEntity {
@@ -57,4 +57,4 @@ export interface GameState {
     entities: Map<string, Entity>;
     relationships: Map<string, Relationship[]>;
   };
-} 
+}

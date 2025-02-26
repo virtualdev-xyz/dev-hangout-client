@@ -19,7 +19,7 @@ export class AssetLoader {
 
     const loadPromise = this.createLoadPromise(config);
     this.loadingPromises.set(config.id, loadPromise);
-    
+
     try {
       const asset = await loadPromise;
       this.assets.set(config.id, asset);
@@ -67,4 +67,4 @@ export class AssetLoader {
       audio.src = url;
     });
   }
-} 
+}

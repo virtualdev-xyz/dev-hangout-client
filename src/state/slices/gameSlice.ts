@@ -15,12 +15,12 @@ const initialState: GameState = {
     characterId: null,
     isInteracting: false,
     nearbyInteractableId: null,
-    position: { x: 0, y: 0 }
+    position: { x: 0, y: 0 },
   },
   entityRegistry: {
     entities: new Map(),
-    relationships: new Map()
-  }
+    relationships: new Map(),
+  },
 };
 
 export const gameSlice = createSlice({
@@ -31,26 +31,32 @@ export const gameSlice = createSlice({
     addCharacter: (state, action: PayloadAction<Character>) => {
       charactersAdapter.addOne(state.characters, action.payload);
     },
-    updateCharacterPosition: (state, action: PayloadAction<{
-      id: string;
-      position: Position;
-    }>) => {
+    updateCharacterPosition: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        position: Position;
+      }>
+    ) => {
       charactersAdapter.updateOne(state.characters, {
         id: action.payload.id,
-        changes: { position: action.payload.position }
+        changes: { position: action.payload.position },
       });
     },
-    updateCharacterState: (state, action: PayloadAction<{
-      id: string;
-      state: CharacterState;
-      direction: Direction;
-    }>) => {
+    updateCharacterState: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        state: CharacterState;
+        direction: Direction;
+      }>
+    ) => {
       charactersAdapter.updateOne(state.characters, {
         id: action.payload.id,
         changes: {
           state: action.payload.state,
-          direction: action.payload.direction
-        }
+          direction: action.payload.direction,
+        },
       });
     },
 
@@ -84,12 +90,15 @@ export const gameSlice = createSlice({
       state.entityRegistry.entities.delete(action.payload);
       state.entityRegistry.relationships.delete(action.payload);
     },
-    addEntityRelationship: (state, action: PayloadAction<{
-      sourceId: string;
-      targetId: string;
-      type: RelationType;
-      metadata?: Record<string, any>;
-    }>) => {
+    addEntityRelationship: (
+      state,
+      action: PayloadAction<{
+        sourceId: string;
+        targetId: string;
+        type: RelationType;
+        metadata?: Record<string, any>;
+      }>
+    ) => {
       const { sourceId, targetId, type, metadata } = action.payload;
       if (!state.entityRegistry.relationships.has(sourceId)) {
         state.entityRegistry.relationships.set(sourceId, []);
@@ -98,23 +107,23 @@ export const gameSlice = createSlice({
         sourceId,
         targetId,
         type,
-        metadata
+        metadata,
       });
-    }
-  }
+    },
+  },
 });
 
 // Selectors
 export const {
   selectAll: selectAllCharacters,
   selectById: selectCharacterById,
-  selectIds: selectCharacterIds
+  selectIds: selectCharacterIds,
 } = charactersAdapter.getSelectors<RootState>(state => state.game.characters);
 
 export const {
   selectAll: selectAllInteractables,
   selectById: selectInteractableById,
-  selectIds: selectInteractableIds
+  selectIds: selectInteractableIds,
 } = interactablesAdapter.getSelectors<RootState>(state => state.game.interactables);
 
 // Action creators
@@ -130,7 +139,7 @@ export const {
   setInteracting,
   registerEntity,
   unregisterEntity,
-  addEntityRelationship
+  addEntityRelationship,
 } = gameSlice.actions;
 
-export const gameReducer = gameSlice.reducer; 
+export const gameReducer = gameSlice.reducer;
