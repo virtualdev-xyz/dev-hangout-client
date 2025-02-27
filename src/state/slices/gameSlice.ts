@@ -1,5 +1,5 @@
 import { createSlice, createEntityAdapter, PayloadAction } from '@reduxjs/toolkit';
-import { Character, InteractableEntity, GameState, Position } from '../types';
+import { Character, InteractableEntity, GameState, Position, SerializedEntityRegistry } from '../types';
 import { RootState } from '../store';
 import { Direction, CharacterState } from '../../systems/rendering/sprites/CharacterSprite';
 import { Entity, EntityType } from '../../systems/entities/EntityRegistry';
@@ -8,6 +8,7 @@ import { RelationType } from '../../systems/entities/EntityRelationship';
 const charactersAdapter = createEntityAdapter<Character>();
 const interactablesAdapter = createEntityAdapter<InteractableEntity>();
 
+// Serializable initial state
 const initialState: GameState = {
   characters: charactersAdapter.getInitialState(),
   interactables: interactablesAdapter.getInitialState(),
@@ -18,8 +19,8 @@ const initialState: GameState = {
     position: { x: 0, y: 0 },
   },
   entityRegistry: {
-    entities: new Map(),
-    relationships: new Map(),
+    entities: {},
+    relationships: {},
   },
 };
 
@@ -84,11 +85,11 @@ export const gameSlice = createSlice({
 
     // Entity Registry actions
     registerEntity: (state, action: PayloadAction<Entity>) => {
-      state.entityRegistry.entities.set(action.payload.id, action.payload);
+      state.entityRegistry.entities[action.payload.id] = action.payload;
     },
     unregisterEntity: (state, action: PayloadAction<string>) => {
-      state.entityRegistry.entities.delete(action.payload);
-      state.entityRegistry.relationships.delete(action.payload);
+      delete state.entityRegistry.entities[action.payload];
+      delete state.entityRegistry.relationships[action.payload];
     },
     addEntityRelationship: (
       state,
@@ -100,10 +101,10 @@ export const gameSlice = createSlice({
       }>
     ) => {
       const { sourceId, targetId, type, metadata } = action.payload;
-      if (!state.entityRegistry.relationships.has(sourceId)) {
-        state.entityRegistry.relationships.set(sourceId, []);
+      if (!state.entityRegistry.relationships[sourceId]) {
+        state.entityRegistry.relationships[sourceId] = [];
       }
-      state.entityRegistry.relationships.get(sourceId)!.push({
+      state.entityRegistry.relationships[sourceId].push({
         sourceId,
         targetId,
         type,

@@ -38,6 +38,12 @@ export interface InteractableEntity {
   data: Record<string, any>;
 }
 
+// Serializable version of the entity registry for persistence
+export interface SerializedEntityRegistry {
+  entities: Record<string, Entity>;
+  relationships: Record<string, Relationship[]>;
+}
+
 export interface GameState {
   characters: {
     ids: string[];
@@ -53,8 +59,5 @@ export interface GameState {
     nearbyInteractableId: string | null;
     position: Position;
   };
-  entityRegistry: {
-    entities: Map<string, Entity>;
-    relationships: Map<string, Relationship[]>;
-  };
+  entityRegistry: SerializedEntityRegistry;
 }
