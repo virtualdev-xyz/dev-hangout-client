@@ -1,0 +1,186 @@
+/* 
+ * Arcade Cabinet Dark Theme
+ * This file defines the dark theme styling for the arcade cabinet UI
+ */
+
+:root {
+  /* Theme colors */
+  --arcade-bg-primary: var(--space-black);
+  --arcade-bg-secondary: #0c0c2a;
+  --arcade-bg-tertiary: #141450;
+  --arcade-bg-highlight: #1a1a7a;
+  
+  /* Text colors */
+  --arcade-text-primary: var(--neon-green);
+  --arcade-text-secondary: var(--crt-blue);
+  --arcade-text-tertiary: var(--bit-yellow);
+  --arcade-text-muted: rgba(0, 255, 0, 0.6);
+  
+  /* Border colors */
+  --arcade-border-primary: var(--crt-blue);
+  --arcade-border-secondary: var(--magenta);
+  --arcade-border-tertiary: var(--bit-yellow);
+  
+  /* UI element colors */
+  --arcade-button-primary: var(--digital-red);
+  --arcade-button-secondary: var(--arcade-purple);
+  --arcade-button-tertiary: var(--retro-orange);
+  --arcade-button-disabled: var(--console-gray);
+  
+  /* Status colors */
+  --arcade-status-success: var(--success-green);
+  --arcade-status-error: var(--error-red);
+  --arcade-status-warning: var(--warning-yellow);
+  --arcade-status-info: var(--info-blue);
+  
+  /* Shadow effects */
+  --arcade-shadow-text: 0 0 5px currentColor;
+  --arcade-shadow-box: 0 0 10px rgba(0, 255, 255, 0.5);
+  --arcade-shadow-inset: inset 0 0 10px rgba(0, 0, 0, 0.8);
+  
+  /* Glow effects */
+  --arcade-glow-blue: 0 0 10px var(--crt-blue), 0 0 20px var(--crt-blue);
+  --arcade-glow-green: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
+  --arcade-glow-magenta: 0 0 10px var(--magenta), 0 0 20px var(--magenta);
+  --arcade-glow-yellow: 0 0 10px var(--bit-yellow), 0 0 20px var(--bit-yellow);
+}
+
+/* Dark theme body styles */
+body.arcade-theme {
+  background-color: var(--arcade-bg-primary);
+  color: var(--arcade-text-primary);
+  background-image: 
+    var(--crt-scanline),
+    radial-gradient(circle at center, rgba(10, 10, 31, 0.8) 0%, rgba(0, 0, 0, 1) 100%);
+}
+
+/* Dark theme typography */
+.arcade-theme h1,
+.arcade-theme h2,
+.arcade-theme h3,
+.arcade-theme h4,
+.arcade-theme h5,
+.arcade-theme h6 {
+  color: var(--arcade-text-secondary);
+  text-shadow: var(--arcade-shadow-text);
+}
+
+.arcade-theme a {
+  color: var(--arcade-text-tertiary);
+}
+
+.arcade-theme a:hover {
+  text-shadow: var(--arcade-glow-yellow);
+}
+
+/* Dark theme UI elements */
+.arcade-theme .button {
+  background-color: var(--arcade-bg-tertiary);
+  color: var(--arcade-text-primary);
+  border: 2px solid var(--arcade-border-primary);
+  box-shadow: var(--arcade-shadow-box);
+  text-transform: uppercase;
+  font-family: var(--font-retro);
+  padding: var(--grid-1) var(--grid-2);
+  transition: all 0.2s ease;
+}
+
+.arcade-theme .button:hover {
+  background-color: var(--arcade-bg-highlight);
+  border-color: var(--arcade-text-primary);
+  box-shadow: var(--arcade-glow-blue);
+}
+
+.arcade-theme .button:active {
+  transform: scale(0.95);
+}
+
+.arcade-theme .button--primary {
+  background-color: var(--arcade-button-primary);
+  color: white;
+}
+
+.arcade-theme .button--secondary {
+  background-color: var(--arcade-button-secondary);
+  color: white;
+}
+
+.arcade-theme .button--disabled {
+  background-color: var(--arcade-button-disabled);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: not-allowed;
+}
+
+/* Dark theme form elements */
+.arcade-theme input,
+.arcade-theme textarea,
+.arcade-theme select {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: var(--arcade-text-secondary);
+  border: 2px solid var(--arcade-border-primary);
+  padding: var(--grid-1);
+  font-family: var(--font-terminal);
+  box-shadow: var(--arcade-shadow-inset);
+}
+
+.arcade-theme input:focus,
+.arcade-theme textarea:focus,
+.arcade-theme select:focus {
+  border-color: var(--arcade-text-primary);
+  outline: none;
+  box-shadow: var(--arcade-glow-blue);
+}
+
+/* Dark theme card elements */
+.arcade-theme .card {
+  background-color: var(--arcade-bg-secondary);
+  border: 2px solid var(--arcade-border-primary);
+  padding: var(--grid-2);
+  box-shadow: var(--arcade-shadow-box);
+}
+
+.arcade-theme .card__header {
+  border-bottom: 2px solid var(--arcade-border-primary);
+  padding-bottom: var(--grid-1);
+  margin-bottom: var(--grid-2);
+}
+
+.arcade-theme .card__title {
+  color: var(--arcade-text-secondary);
+  text-transform: uppercase;
+  font-family: var(--font-retro);
+}
+
+/* Dark theme status indicators */
+.arcade-theme .status {
+  display: inline-block;
+  padding: var(--grid-0-5) var(--grid-1);
+  border-radius: 2px;
+  font-family: var(--font-terminal);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+}
+
+.arcade-theme .status--success {
+  background-color: rgba(0, 255, 0, 0.2);
+  color: var(--arcade-status-success);
+  border: 1px solid var(--arcade-status-success);
+}
+
+.arcade-theme .status--error {
+  background-color: rgba(255, 0, 0, 0.2);
+  color: var(--arcade-status-error);
+  border: 1px solid var(--arcade-status-error);
+}
+
+.arcade-theme .status--warning {
+  background-color: rgba(255, 204, 0, 0.2);
+  color: var(--arcade-status-warning);
+  border: 1px solid var(--arcade-status-warning);
+}
+
+.arcade-theme .status--info {
+  background-color: rgba(0, 204, 255, 0.2);
+  color: var(--arcade-status-info);
+  border: 1px solid var(--arcade-status-info);
+} 

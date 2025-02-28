@@ -1,0 +1,197 @@
+/* 
+ * Pixel Animation Utilities
+ * This file defines animation utilities for pixel effects
+ */
+
+/* Basic animations */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+/* Pixel-specific animations */
+@keyframes pixelate {
+  0%, 100% { filter: url(#pixelate-normal); }
+  50% { filter: url(#pixelate-heavy); }
+}
+
+@keyframes scanlines {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+@keyframes glitch {
+  0%, 100% { 
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  20% { 
+    clip-path: inset(20% 0 20% 0);
+    transform: translate(-2px, 2px);
+  }
+  40% { 
+    clip-path: inset(40% 0 40% 0);
+    transform: translate(2px, -2px);
+  }
+  60% { 
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(0);
+  }
+  80% { 
+    clip-path: inset(10% 0 60% 0);
+    transform: translate(-1px, 1px);
+  }
+}
+
+@keyframes textType {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes pixelFadeIn {
+  0% { 
+    opacity: 0;
+    filter: blur(2px);
+  }
+  50% {
+    opacity: 0.5;
+    filter: blur(1px);
+  }
+  100% { 
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes pixelFadeOut {
+  0% { 
+    opacity: 1;
+    filter: blur(0);
+  }
+  50% {
+    opacity: 0.5;
+    filter: blur(1px);
+  }
+  100% { 
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+
+/* Character animations */
+@keyframes walkRight {
+  0% { background-position: 0 0; }
+  100% { background-position: -128px 0; } /* Assuming 4 frames of 32px width */
+}
+
+@keyframes walkLeft {
+  0% { background-position: 0 -32px; }
+  100% { background-position: -128px -32px; } /* Assuming 4 frames of 32px height */
+}
+
+@keyframes walkUp {
+  0% { background-position: 0 -64px; }
+  100% { background-position: -128px -64px; }
+}
+
+@keyframes walkDown {
+  0% { background-position: 0 -96px; }
+  100% { background-position: -128px -96px; }
+}
+
+@keyframes idle {
+  0%, 100% { background-position: 0 0; }
+  50% { background-position: -32px 0; } /* Assuming 2 frames of 32px width */
+}
+
+/* UI effect animations */
+@keyframes buttonPress {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+}
+
+@keyframes highlight {
+  0%, 100% { 
+    box-shadow: 0 0 0 transparent;
+    border-color: var(--arcade-border-primary);
+  }
+  50% { 
+    box-shadow: 0 0 10px var(--crt-blue);
+    border-color: var(--crt-blue);
+  }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Animation utility classes */
+.animate-blink { animation: blink 1s step-end infinite; }
+.animate-pulse { animation: pulse 2s ease-in-out infinite; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-shake { animation: shake 0.5s ease-in-out; }
+.animate-pixelate { animation: pixelate 2s ease-in-out; }
+.animate-scanlines { animation: scanlines 10s linear infinite; }
+.animate-glitch { animation: glitch 0.3s step-end infinite; }
+.animate-type { 
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: textType 3s steps(40, end);
+}
+.animate-fade-in { animation: pixelFadeIn 0.5s ease-out; }
+.animate-fade-out { animation: pixelFadeOut 0.5s ease-in; }
+
+/* Character animation classes */
+.animate-walk-right { animation: walkRight 0.5s steps(4) infinite; }
+.animate-walk-left { animation: walkLeft 0.5s steps(4) infinite; }
+.animate-walk-up { animation: walkUp 0.5s steps(4) infinite; }
+.animate-walk-down { animation: walkDown 0.5s steps(4) infinite; }
+.animate-idle { animation: idle 1s steps(2) infinite; }
+
+/* UI animation classes */
+.animate-button-press { animation: buttonPress 0.2s ease-out; }
+.animate-highlight { animation: highlight 1s ease-in-out infinite; }
+.animate-rotate { animation: rotate 2s linear infinite; }
+
+/* SVG filters for pixel effects */
+.pixel-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* Animation timing modifiers */
+.animation-fast { animation-duration: 0.2s !important; }
+.animation-normal { animation-duration: 0.5s !important; }
+.animation-slow { animation-duration: 1s !important; }
+.animation-very-slow { animation-duration: 2s !important; }
+
+/* Animation iteration modifiers */
+.animation-once { animation-iteration-count: 1 !important; }
+.animation-twice { animation-iteration-count: 2 !important; }
+.animation-infinite { animation-iteration-count: infinite !important; }
+
+/* Animation delay modifiers */
+.animation-delay-short { animation-delay: 0.2s !important; }
+.animation-delay-medium { animation-delay: 0.5s !important; }
+.animation-delay-long { animation-delay: 1s !important; } 
