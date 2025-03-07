@@ -30,6 +30,28 @@ export const retroTheme = {
     
     // Background colors
     darkNavy: '#000033',
+    
+    // Button colors
+    arcadeButtonPrimary: '#FF0000',
+    arcadeButtonSecondary: '#9900FF',
+    arcadeButtonTertiary: '#141450',
+    arcadeButtonDisabled: '#666666',
+    
+    // Text colors
+    arcadeTextPrimary: '#00FF00',
+    arcadeTextSecondary: '#00FFFF',
+    arcadeTextTertiary: '#FFFF00',
+    
+    // Border colors
+    arcadeBorderPrimary: '#00FFFF',
+    arcadeBorderSecondary: '#FF00FF',
+    arcadeBorderTertiary: '#FFFF00',
+    
+    // Background colors
+    arcadeBgPrimary: '#0A0A1F',
+    arcadeBgSecondary: '#0C0C2A',
+    arcadeBgTertiary: '#141450',
+    arcadeBgHighlight: '#1A1A7A',
   },
 
   gradients: {
@@ -43,6 +65,7 @@ export const retroTheme = {
     subheading: '"VCR OSD Mono", monospace',
     body: '"Share Tech Mono", monospace',
     code: '"DOS", monospace',
+    terminal: '"Share Tech Mono", monospace',
   },
 
   fontSizes: {
@@ -55,7 +78,10 @@ export const retroTheme = {
   },
 
   spacing: {
+    0: '0',
+    0.5: '4px',
     1: '8px',
+    1.5: '12px',
     2: '16px',
     3: '24px',
     4: '32px',
