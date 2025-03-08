@@ -1,0 +1,155 @@
+/* Typography for Arcade Cabinet Theme */
+:root {
+  /* Font Families */
+  --font-retro: "Press Start 2P", "VT323", monospace;
+  --font-terminal: "Fira Code", "Source Code Pro", monospace;
+  --font-pixel: "Minecraft", "8bit", monospace;
+
+  /* Font Sizes - Based on 8px Grid */
+  --font-size-xs: 8px;
+  --font-size-sm: 12px;
+  --font-size-md: 16px;
+  --font-size-lg: 24px;
+  --font-size-xl: 32px;
+  --font-size-2xl: 48px;
+
+  /* Line Heights */
+  --line-height-tight: 1;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 2;
+
+  /* Grid System - Based on 8px */
+  --grid-0-5: 4px;
+  --grid-1: 8px;
+  --grid-2: 16px;
+  --grid-3: 24px;
+  --grid-4: 32px;
+  --grid-5: 40px;
+  --grid-6: 48px;
+  --grid-8: 64px;
+  --grid-10: 80px;
+  --grid-12: 96px;
+  --grid-16: 128px;
+}
+
+/* Base Typography */
+.arcade-theme {
+  font-family: var(--font-retro);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Heading Sizes */
+.arcade-theme h1 {
+  font-size: var(--font-size-2xl);
+  line-height: var(--line-height-tight);
+}
+
+.arcade-theme h2 {
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-tight);
+}
+
+.arcade-theme h3 {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-tight);
+}
+
+.arcade-theme h4 {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
+}
+
+.arcade-theme h5,
+.arcade-theme h6 {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+/* Terminal Text */
+.arcade-theme .terminal-text {
+  font-family: var(--font-terminal);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Pixel Text */
+.arcade-theme .pixel-text {
+  font-family: var(--font-pixel);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
+  letter-spacing: 1px;
+}
+
+/* Text Utilities */
+.arcade-theme .text-glitch {
+  position: relative;
+  display: inline-block;
+}
+
+.arcade-theme .text-glitch::before,
+.arcade-theme .text-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  clip: rect(0, 0, 0, 0);
+}
+
+.arcade-theme .text-glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--arcade-text-secondary);
+  animation: glitch-1 2s infinite linear alternate-reverse;
+}
+
+.arcade-theme .text-glitch::after {
+  left: -2px;
+  text-shadow: 2px 0 var(--arcade-text-tertiary);
+  animation: glitch-2 3s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-1 {
+  0% {
+    clip: rect(20px, 9999px, 15px, 0);
+  }
+  20% {
+    clip: rect(12px, 9999px, 25px, 0);
+  }
+  40% {
+    clip: rect(25px, 9999px, 12px, 0);
+  }
+  60% {
+    clip: rect(18px, 9999px, 28px, 0);
+  }
+  80% {
+    clip: rect(24px, 9999px, 16px, 0);
+  }
+  100% {
+    clip: rect(15px, 9999px, 22px, 0);
+  }
+}
+
+@keyframes glitch-2 {
+  0% {
+    clip: rect(15px, 9999px, 25px, 0);
+  }
+  20% {
+    clip: rect(22px, 9999px, 18px, 0);
+  }
+  40% {
+    clip: rect(18px, 9999px, 25px, 0);
+  }
+  60% {
+    clip: rect(24px, 9999px, 15px, 0);
+  }
+  80% {
+    clip: rect(19px, 9999px, 20px, 0);
+  }
+  100% {
+    clip: rect(16px, 9999px, 23px, 0);
+  }
+} 

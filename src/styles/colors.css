@@ -1,0 +1,43 @@
+/* Base Colors for Arcade Cabinet Theme */
+:root {
+  /* Core Colors */
+  --space-black: #050510;
+  --neon-green: #00ff00;
+  --crt-blue: #00ffff;
+  --magenta: #ff00ff;
+  --bit-yellow: #ffff00;
+  --digital-red: #ff0000;
+  --arcade-purple: #9900ff;
+  --retro-orange: #ff6600;
+  --console-gray: #333333;
+
+  /* Status Colors */
+  --success-green: #33ff33;
+  --error-red: #ff3333;
+  --warning-yellow: #ffcc00;
+  --info-blue: #00ccff;
+
+  /* CRT Effects */
+  --crt-scanline: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.2) 0px,
+    rgba(0, 0, 0, 0.2) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  
+  /* Gradients */
+  --gradient-neon: linear-gradient(
+    45deg,
+    var(--neon-green) 0%,
+    var(--crt-blue) 50%,
+    var(--magenta) 100%
+  );
+  
+  --gradient-retro: linear-gradient(
+    180deg,
+    var(--bit-yellow) 0%,
+    var(--retro-orange) 50%,
+    var(--digital-red) 100%
+  );
+} 

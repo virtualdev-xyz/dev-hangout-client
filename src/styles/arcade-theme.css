@@ -43,6 +43,10 @@
   --arcade-glow-green: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
   --arcade-glow-magenta: 0 0 10px var(--magenta), 0 0 20px var(--magenta);
   --arcade-glow-yellow: 0 0 10px var(--bit-yellow), 0 0 20px var(--bit-yellow);
+
+  /* CRT and Screen Effects */
+  --crt-flicker: none;
+  --screen-curve: none;
 }
 
 /* Dark theme body styles */
@@ -52,6 +56,55 @@ body.arcade-theme {
   background-image: 
     var(--crt-scanline),
     radial-gradient(circle at center, rgba(10, 10, 31, 0.8) 0%, rgba(0, 0, 0, 1) 100%);
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--font-retro);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* CRT Screen Effect */
+body.arcade-theme::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(
+      rgba(18, 16, 16, 0) 50%,
+      rgba(0, 0, 0, 0.25) 50%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.06),
+      rgba(0, 255, 0, 0.02),
+      rgba(0, 0, 255, 0.06)
+    );
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+  animation: flicker 0.15s infinite;
+  opacity: 0.4;
+  z-index: 2;
+}
+
+/* Screen Curve Effect */
+body.arcade-theme::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(
+      circle at center,
+      transparent 50%,
+      rgba(0, 0, 0, 0.5) 150%
+    );
+  pointer-events: none;
+  z-index: 3;
 }
 
 /* Dark theme typography */
@@ -63,14 +116,32 @@ body.arcade-theme {
 .arcade-theme h6 {
   color: var(--arcade-text-secondary);
   text-shadow: var(--arcade-shadow-text);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: var(--grid-2);
 }
 
 .arcade-theme a {
   color: var(--arcade-text-tertiary);
+  text-decoration: none;
+  position: relative;
+  padding: 0 4px;
 }
 
 .arcade-theme a:hover {
   text-shadow: var(--arcade-glow-yellow);
+}
+
+.arcade-theme a::before {
+  content: ">";
+  position: absolute;
+  left: -12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.arcade-theme a:hover::before {
+  opacity: 1;
 }
 
 /* Dark theme UI elements */
@@ -83,12 +154,36 @@ body.arcade-theme {
   font-family: var(--font-retro);
   padding: var(--grid-1) var(--grid-2);
   transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.arcade-theme .button::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  transform: rotate(45deg);
+  transition: transform 0.3s ease;
 }
 
 .arcade-theme .button:hover {
   background-color: var(--arcade-bg-highlight);
   border-color: var(--arcade-text-primary);
   box-shadow: var(--arcade-glow-blue);
+}
+
+.arcade-theme .button:hover::after {
+  transform: rotate(45deg) translate(50%, 50%);
 }
 
 .arcade-theme .button:active {
@@ -98,17 +193,20 @@ body.arcade-theme {
 .arcade-theme .button--primary {
   background-color: var(--arcade-button-primary);
   color: white;
+  border-color: var(--arcade-border-secondary);
 }
 
 .arcade-theme .button--secondary {
   background-color: var(--arcade-button-secondary);
   color: white;
+  border-color: var(--arcade-border-tertiary);
 }
 
 .arcade-theme .button--disabled {
   background-color: var(--arcade-button-disabled);
   color: rgba(255, 255, 255, 0.5);
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* Dark theme form elements */
@@ -121,6 +219,8 @@ body.arcade-theme {
   padding: var(--grid-1);
   font-family: var(--font-terminal);
   box-shadow: var(--arcade-shadow-inset);
+  border-radius: 0;
+  appearance: none;
 }
 
 .arcade-theme input:focus,
@@ -131,24 +231,47 @@ body.arcade-theme {
   box-shadow: var(--arcade-glow-blue);
 }
 
+/* Custom select arrow */
+.arcade-theme select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%2300ffff' d='M0 0h2v2H0zM2 2h2v2H2zM4 4h2v2H4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+}
+
 /* Dark theme card elements */
 .arcade-theme .card {
   background-color: var(--arcade-bg-secondary);
   border: 2px solid var(--arcade-border-primary);
   padding: var(--grid-2);
   box-shadow: var(--arcade-shadow-box);
+  position: relative;
+}
+
+.arcade-theme .card::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid var(--arcade-border-secondary);
+  pointer-events: none;
 }
 
 .arcade-theme .card__header {
   border-bottom: 2px solid var(--arcade-border-primary);
   padding-bottom: var(--grid-1);
   margin-bottom: var(--grid-2);
+  position: relative;
 }
 
 .arcade-theme .card__title {
   color: var(--arcade-text-secondary);
   text-transform: uppercase;
   font-family: var(--font-retro);
+  margin: 0;
+  text-shadow: var(--arcade-glow-blue);
 }
 
 /* Dark theme status indicators */
@@ -159,6 +282,18 @@ body.arcade-theme {
   font-family: var(--font-terminal);
   font-size: var(--font-size-sm);
   text-transform: uppercase;
+  position: relative;
+}
+
+.arcade-theme .status::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  width: 4px;
+  height: 4px;
+  transform: translateY(-50%);
+  border-radius: 50%;
 }
 
 .arcade-theme .status--success {
@@ -167,10 +302,20 @@ body.arcade-theme {
   border: 1px solid var(--arcade-status-success);
 }
 
+.arcade-theme .status--success::before {
+  background-color: var(--arcade-status-success);
+  box-shadow: 0 0 4px var(--arcade-status-success);
+}
+
 .arcade-theme .status--error {
   background-color: rgba(255, 0, 0, 0.2);
   color: var(--arcade-status-error);
   border: 1px solid var(--arcade-status-error);
+}
+
+.arcade-theme .status--error::before {
+  background-color: var(--arcade-status-error);
+  box-shadow: 0 0 4px var(--arcade-status-error);
 }
 
 .arcade-theme .status--warning {
@@ -179,8 +324,45 @@ body.arcade-theme {
   border: 1px solid var(--arcade-status-warning);
 }
 
+.arcade-theme .status--warning::before {
+  background-color: var(--arcade-status-warning);
+  box-shadow: 0 0 4px var(--arcade-status-warning);
+}
+
 .arcade-theme .status--info {
   background-color: rgba(0, 204, 255, 0.2);
   color: var(--arcade-status-info);
   border: 1px solid var(--arcade-status-info);
+}
+
+.arcade-theme .status--info::before {
+  background-color: var(--arcade-status-info);
+  box-shadow: 0 0 4px var(--arcade-status-info);
+}
+
+/* Animations */
+@keyframes flicker {
+  0% { opacity: 0.4; }
+  50% { opacity: 0.5; }
+  100% { opacity: 0.4; }
+}
+
+/* Utility classes */
+.arcade-theme .pixel-border {
+  position: relative;
+  padding: 8px;
+}
+
+.arcade-theme .pixel-border::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(45deg, transparent 2px, var(--arcade-border-primary) 2px, var(--arcade-border-primary) 4px, transparent 4px),
+    linear-gradient(-45deg, transparent 2px, var(--arcade-border-primary) 2px, var(--arcade-border-primary) 4px, transparent 4px);
+  background-size: 8px 8px;
+  pointer-events: none;
 } 

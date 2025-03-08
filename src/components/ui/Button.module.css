@@ -1,0 +1,147 @@
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--grid-1) var(--grid-2);
+  border: 2px solid var(--arcade-border-primary);
+  background-color: var(--arcade-bg-tertiary);
+  color: var(--arcade-text-primary);
+  font-family: var(--font-retro);
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.2s steps(4);
+  image-rendering: pixelated;
+}
+
+.button--pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.button--animated:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 0 var(--arcade-border-primary);
+}
+
+.button--animated:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.button__content {
+  position: relative;
+  z-index: 1;
+}
+
+.button__shine {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  transform: rotate(45deg);
+  transition: transform 0.3s steps(4);
+  pointer-events: none;
+}
+
+.button:hover .button__shine {
+  transform: rotate(45deg) translate(50%, 50%);
+}
+
+/* Variants */
+.button--primary {
+  background-color: var(--arcade-button-primary);
+  border-color: var(--arcade-border-secondary);
+  color: white;
+}
+
+.button--secondary {
+  background-color: var(--arcade-button-secondary);
+  border-color: var(--arcade-border-tertiary);
+  color: white;
+}
+
+.button--tertiary {
+  background-color: var(--arcade-button-tertiary);
+  border-color: var(--arcade-border-primary);
+  color: white;
+}
+
+/* Sizes */
+.button--small {
+  padding: var(--grid-0-5) var(--grid-1);
+  font-size: var(--font-size-sm);
+}
+
+.button--medium {
+  padding: var(--grid-1) var(--grid-2);
+  font-size: var(--font-size-md);
+}
+
+.button--large {
+  padding: var(--grid-2) var(--grid-3);
+  font-size: var(--font-size-lg);
+}
+
+/* States */
+.button--disabled {
+  background-color: var(--arcade-button-disabled);
+  border-color: var(--arcade-border-primary);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Pixel Border Effect */
+.button::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s steps(4);
+}
+
+.button:focus-visible {
+  outline: none;
+}
+
+.button:focus-visible::before {
+  border-color: var(--arcade-text-primary);
+}
+
+/* Hover Effects */
+.button:hover {
+  background-color: var(--arcade-bg-highlight);
+  border-color: var(--arcade-text-primary);
+  box-shadow: var(--arcade-glow-blue);
+}
+
+.button--primary:hover {
+  box-shadow: var(--arcade-glow-magenta);
+}
+
+.button--secondary:hover {
+  box-shadow: var(--arcade-glow-yellow);
+}
+
+.button--tertiary:hover {
+  box-shadow: var(--arcade-glow-green);
+}
+
+/* Press Effect */
+.button:active {
+  transform: scale(0.95);
+  transition-duration: 0.1s;
+} 

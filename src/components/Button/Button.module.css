@@ -1,0 +1,146 @@
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--grid-1) var(--grid-2);
+  font-family: var(--font-retro);
+  text-transform: uppercase;
+  border: 2px solid var(--arcade-border-primary);
+  background-color: var(--arcade-bg-tertiary);
+  color: var(--arcade-text-primary);
+  cursor: pointer;
+  transition: all 0.2s steps(4);
+  image-rendering: pixelated;
+  text-shadow: var(--arcade-shadow-text);
+  box-shadow: var(--arcade-shadow-box);
+  min-width: var(--grid-12);
+}
+
+/* Variants */
+.button--primary {
+  background-color: var(--arcade-button-primary);
+  border-color: var(--arcade-border-secondary);
+  color: white;
+}
+
+.button--secondary {
+  background-color: var(--arcade-button-secondary);
+  border-color: var(--arcade-border-tertiary);
+  color: white;
+}
+
+.button--tertiary {
+  background-color: var(--arcade-button-tertiary);
+  border-color: var(--arcade-border-primary);
+  color: white;
+}
+
+/* Sizes */
+.button--small {
+  padding: var(--grid-0-5) var(--grid-1);
+  font-size: var(--font-size-sm);
+  min-width: var(--grid-8);
+}
+
+.button--medium {
+  padding: var(--grid-1) var(--grid-2);
+  font-size: var(--font-size-md);
+  min-width: var(--grid-12);
+}
+
+.button--large {
+  padding: var(--grid-2) var(--grid-3);
+  font-size: var(--font-size-lg);
+  min-width: var(--grid-16);
+}
+
+/* Pixelated Effect */
+.button--pixelated {
+  clip-path: polygon(
+    0 var(--pixel-unit),
+    var(--pixel-unit) 0,
+    calc(100% - var(--pixel-unit)) 0,
+    100% var(--pixel-unit),
+    100% calc(100% - var(--pixel-unit)),
+    calc(100% - var(--pixel-unit)) 100%,
+    var(--pixel-unit) 100%,
+    0 calc(100% - var(--pixel-unit))
+  );
+}
+
+.button--pixelated::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: linear-gradient(45deg, transparent 2px, rgba(255, 255, 255, 0.1) 2px);
+  clip-path: inherit;
+  pointer-events: none;
+}
+
+/* Animated Effects */
+.button--animated {
+  transition: all 0.2s steps(4);
+}
+
+.button--animated:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    var(--arcade-glow-blue),
+    0 4px 0 var(--arcade-border-primary);
+}
+
+.button--animated:active {
+  transform: translateY(2px);
+  box-shadow: 
+    var(--arcade-glow-blue),
+    0 0 0 var(--arcade-border-primary);
+}
+
+/* Disabled State */
+.button:disabled {
+  background-color: var(--arcade-button-disabled);
+  border-color: var(--arcade-border-primary);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Focus State */
+.button:focus {
+  outline: none;
+  box-shadow: var(--arcade-glow-blue);
+}
+
+.button:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+/* Loading State */
+.button--loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.button--loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--grid-2);
+  height: var(--grid-2);
+  border: 2px solid var(--arcade-border-primary);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: buttonSpin 1s linear infinite;
+}
+
+@keyframes buttonSpin {
+  to {
+    transform: rotate(360deg);
+  }
+} 

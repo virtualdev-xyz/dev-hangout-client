@@ -1,0 +1,182 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--grid-2);
+}
+
+.dialog {
+  position: relative;
+  background-color: var(--arcade-bg-secondary);
+  color: var(--arcade-text-primary);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+  font-family: var(--font-terminal);
+  transform-origin: center;
+  animation: dialogEnter 0.3s steps(6) forwards;
+}
+
+.dialog--animating {
+  animation: dialogEnter 0.3s steps(6) forwards;
+}
+
+.border {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  gap: 0;
+}
+
+.corner {
+  padding: var(--grid-1);
+  color: var(--arcade-text-secondary);
+  font-family: monospace;
+  user-select: none;
+}
+
+.edge {
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  color: var(--arcade-text-secondary);
+  font-family: monospace;
+  user-select: none;
+  overflow: hidden;
+}
+
+.edge:nth-child(2),
+.edge:nth-child(8) {
+  padding: 0 var(--grid-1);
+}
+
+.edge:nth-child(2)::after,
+.edge:nth-child(8)::after {
+  content: "----------------------------------------";
+  white-space: nowrap;
+}
+
+.edge:nth-child(4),
+.edge:nth-child(6) {
+  padding: var(--grid-1) 0;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+.content {
+  padding: var(--grid-2);
+  min-width: 300px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--grid-2);
+  padding-bottom: var(--grid-1);
+  border-bottom: 2px solid var(--arcade-border-primary);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  color: var(--arcade-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: var(--arcade-shadow-text);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--arcade-text-tertiary);
+  font-size: var(--font-size-xl);
+  cursor: pointer;
+  padding: var(--grid-0-5);
+  line-height: 1;
+  transition: all 0.2s steps(4);
+}
+
+.closeButton:hover {
+  color: var(--arcade-text-primary);
+  text-shadow: var(--arcade-glow-green);
+  transform: scale(1.1);
+}
+
+.body {
+  overflow-y: auto;
+  max-height: calc(90vh - 200px);
+  padding-right: var(--grid-2);
+}
+
+/* Variants */
+.dialog--default {
+  border: 2px solid var(--arcade-border-primary);
+  box-shadow: var(--arcade-shadow-box);
+}
+
+.dialog--alert {
+  border: 2px solid var(--arcade-status-warning);
+  box-shadow: 0 0 10px var(--arcade-status-warning);
+}
+
+.dialog--success {
+  border: 2px solid var(--arcade-status-success);
+  box-shadow: 0 0 10px var(--arcade-status-success);
+}
+
+.dialog--error {
+  border: 2px solid var(--arcade-status-error);
+  box-shadow: 0 0 10px var(--arcade-status-error);
+}
+
+/* Sizes */
+.dialog--small {
+  width: 400px;
+}
+
+.dialog--medium {
+  width: 600px;
+}
+
+.dialog--large {
+  width: 800px;
+}
+
+/* Animations */
+@keyframes dialogEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Scrollbar Styling */
+.body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.body::-webkit-scrollbar-track {
+  background: var(--arcade-bg-primary);
+  border: 1px solid var(--arcade-border-primary);
+}
+
+.body::-webkit-scrollbar-thumb {
+  background: var(--arcade-border-primary);
+  border: 2px solid var(--arcade-bg-primary);
+}
+
+.body::-webkit-scrollbar-thumb:hover {
+  background: var(--arcade-text-primary);
+} 

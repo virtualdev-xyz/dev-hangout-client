@@ -1,0 +1,221 @@
+.card {
+  position: relative;
+  background-color: var(--arcade-bg-secondary);
+  color: var(--arcade-text-primary);
+  transition: all 0.2s steps(4);
+  image-rendering: pixelated;
+}
+
+.frame {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  gap: 0;
+  border: 2px solid var(--arcade-border-primary);
+  box-shadow: var(--arcade-shadow-box);
+}
+
+.corner {
+  padding: var(--grid-1);
+  color: var(--arcade-text-secondary);
+  font-family: monospace;
+  user-select: none;
+}
+
+.edge {
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  color: var(--arcade-text-secondary);
+  font-family: monospace;
+  user-select: none;
+  overflow: hidden;
+}
+
+.edge:nth-child(2),
+.edge:nth-child(8) {
+  padding: 0 var(--grid-1);
+}
+
+.edge:nth-child(2)::after,
+.edge:nth-child(8)::after {
+  content: "────────────────";
+  white-space: nowrap;
+}
+
+.edge:nth-child(4),
+.edge:nth-child(6) {
+  padding: var(--grid-1) 0;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+.content {
+  padding: var(--grid-2);
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  margin-bottom: var(--grid-2);
+  overflow: hidden;
+  border: 2px solid var(--arcade-border-secondary);
+}
+
+.image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  transition: transform 0.2s steps(4);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-1);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  color: var(--arcade-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: var(--arcade-shadow-text);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--arcade-text-tertiary);
+  line-height: var(--line-height-relaxed);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--grid-1);
+  margin-top: var(--grid-1);
+}
+
+.badge {
+  padding: var(--grid-0-5) var(--grid-1);
+  background-color: var(--arcade-bg-tertiary);
+  border: 1px solid var(--arcade-border-tertiary);
+  color: var(--arcade-text-tertiary);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.status {
+  position: absolute;
+  top: var(--grid-1);
+  right: var(--grid-1);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--arcade-bg-secondary);
+}
+
+.status--online {
+  background-color: var(--arcade-status-success);
+  box-shadow: 0 0 8px var(--arcade-status-success);
+}
+
+.status--offline {
+  background-color: var(--arcade-status-error);
+  box-shadow: 0 0 8px var(--arcade-status-error);
+}
+
+.status--away {
+  background-color: var(--arcade-status-warning);
+  box-shadow: 0 0 8px var(--arcade-status-warning);
+}
+
+.status--busy {
+  background-color: var(--arcade-status-info);
+  box-shadow: 0 0 8px var(--arcade-status-info);
+}
+
+/* Variants */
+.card--default {
+  background-color: var(--arcade-bg-secondary);
+}
+
+.card--highlight {
+  background-color: var(--arcade-bg-tertiary);
+  border-color: var(--arcade-text-secondary);
+}
+
+.card--selected {
+  background-color: var(--arcade-bg-highlight);
+  border-color: var(--arcade-text-primary);
+}
+
+/* Interactive States */
+.card--clickable {
+  cursor: pointer;
+}
+
+.card--clickable:hover {
+  transform: translateY(-2px);
+}
+
+.card--clickable:hover .image {
+  transform: scale(1.05);
+}
+
+.card--animated:hover {
+  box-shadow: var(--arcade-glow-blue);
+}
+
+.card--animated:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Pixel Overlay */
+.pixelOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.02) 25%,
+      transparent 25%,
+      transparent 75%,
+      rgba(255, 255, 255, 0.02) 75%
+    );
+  background-size: 4px 4px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Focus States */
+.card--clickable:focus-visible {
+  outline: none;
+}
+
+.card--clickable:focus-visible .frame {
+  border-color: var(--arcade-text-primary);
+  box-shadow: var(--arcade-glow-blue);
+}
+
+/* Animation */
+@keyframes cardPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.card--animated.card--selected {
+  animation: cardPulse 2s steps(8) infinite;
+} 

@@ -1,0 +1,196 @@
+.dialogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s steps(4) forwards;
+}
+
+.dialogContainer {
+  position: relative;
+  background-color: var(--arcade-bg-secondary);
+  color: var(--arcade-text-primary);
+  margin: var(--grid-2);
+  animation: scaleIn 0.3s steps(6) forwards;
+}
+
+.dialogFrame {
+  position: relative;
+  padding: var(--grid-3);
+}
+
+/* ASCII Border */
+.dialogFrame::before {
+  content: "┌──────────────────────────┐";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: var(--grid-1);
+  color: var(--arcade-border-primary);
+  font-family: monospace;
+  white-space: pre;
+}
+
+.dialogFrame::after {
+  content: "└──────────────────────────┘";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--grid-1);
+  color: var(--arcade-border-primary);
+  font-family: monospace;
+  white-space: pre;
+}
+
+/* Vertical Borders */
+.dialogContainer::before,
+.dialogContainer::after {
+  content: "│";
+  position: absolute;
+  top: var(--grid-4);
+  bottom: var(--grid-4);
+  color: var(--arcade-border-primary);
+  font-family: monospace;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dialogContainer::before {
+  left: var(--grid-1);
+}
+
+.dialogContainer::after {
+  right: var(--grid-1);
+}
+
+/* Dialog Header */
+.dialogHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--grid-3);
+  padding-top: var(--grid-2);
+}
+
+.dialogTitle {
+  font-family: var(--font-retro);
+  font-size: var(--font-size-lg);
+  color: var(--arcade-text-secondary);
+  text-transform: uppercase;
+  text-shadow: var(--arcade-glow-blue);
+}
+
+.dialogClose {
+  font-size: var(--font-size-xl);
+  line-height: 1;
+  padding: 0 var(--grid-1);
+}
+
+/* Dialog Content */
+.dialogContent {
+  margin-bottom: var(--grid-3);
+  font-family: var(--font-terminal);
+  line-height: var(--line-height-relaxed);
+  color: var(--arcade-text-primary);
+}
+
+/* Dialog Actions */
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--grid-2);
+  margin-top: var(--grid-3);
+  padding-bottom: var(--grid-2);
+}
+
+/* Dialog Sizes */
+.dialog--small {
+  width: 400px;
+}
+
+.dialog--medium {
+  width: 600px;
+}
+
+.dialog--large {
+  width: 800px;
+}
+
+/* Dialog Variants */
+.dialog--info {
+  border: 2px solid var(--arcade-status-info);
+}
+
+.dialog--info .dialogTitle {
+  color: var(--arcade-status-info);
+}
+
+.dialog--success {
+  border: 2px solid var(--arcade-status-success);
+}
+
+.dialog--success .dialogTitle {
+  color: var(--arcade-status-success);
+}
+
+.dialog--warning {
+  border: 2px solid var(--arcade-status-warning);
+}
+
+.dialog--warning .dialogTitle {
+  color: var(--arcade-status-warning);
+}
+
+.dialog--error {
+  border: 2px solid var(--arcade-status-error);
+}
+
+.dialog--error .dialogTitle {
+  color: var(--arcade-status-error);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dialog--small,
+  .dialog--medium,
+  .dialog--large {
+    width: calc(100% - var(--grid-4));
+    margin: var(--grid-2);
+  }
+  
+  .dialogFrame {
+    padding: var(--grid-2);
+  }
+  
+  .dialogTitle {
+    font-size: var(--font-size-md);
+  }
+} 

@@ -1,0 +1,186 @@
+/* Pixel Animation Utilities */
+:root {
+  /* Animation Timing */
+  --animation-speed-slow: 1.5s;
+  --animation-speed-normal: 0.5s;
+  --animation-speed-fast: 0.2s;
+  
+  /* Pixel Movement Units */
+  --pixel-unit: 8px;
+}
+
+/* Pixel Movement Animations */
+@keyframes pixel-slide-right {
+  0% {
+    transform: translateX(0);
+    image-rendering: pixelated;
+  }
+  100% {
+    transform: translateX(var(--pixel-unit));
+    image-rendering: pixelated;
+  }
+}
+
+@keyframes pixel-slide-left {
+  0% {
+    transform: translateX(0);
+    image-rendering: pixelated;
+  }
+  100% {
+    transform: translateX(calc(var(--pixel-unit) * -1));
+    image-rendering: pixelated;
+  }
+}
+
+@keyframes pixel-bounce {
+  0%, 100% {
+    transform: translateY(0);
+    image-rendering: pixelated;
+  }
+  50% {
+    transform: translateY(calc(var(--pixel-unit) * -1));
+    image-rendering: pixelated;
+  }
+}
+
+@keyframes pixel-rotate {
+  0% {
+    transform: rotate(0deg);
+    image-rendering: pixelated;
+  }
+  100% {
+    transform: rotate(90deg);
+    image-rendering: pixelated;
+  }
+}
+
+@keyframes pixel-scale {
+  0% {
+    transform: scale(1);
+    image-rendering: pixelated;
+  }
+  50% {
+    transform: scale(1.2);
+    image-rendering: pixelated;
+  }
+  100% {
+    transform: scale(1);
+    image-rendering: pixelated;
+  }
+}
+
+@keyframes pixel-fade {
+  0% {
+    opacity: 1;
+    image-rendering: pixelated;
+  }
+  50% {
+    opacity: 0.5;
+    image-rendering: pixelated;
+  }
+  100% {
+    opacity: 1;
+    image-rendering: pixelated;
+  }
+}
+
+@keyframes pixel-shake {
+  0%, 100% {
+    transform: translateX(0);
+    image-rendering: pixelated;
+  }
+  25% {
+    transform: translateX(var(--pixel-unit));
+    image-rendering: pixelated;
+  }
+  75% {
+    transform: translateX(calc(var(--pixel-unit) * -1));
+    image-rendering: pixelated;
+  }
+}
+
+/* Animation Classes */
+.pixel-anim-slide-right {
+  animation: pixel-slide-right var(--animation-speed-normal) steps(8) infinite;
+}
+
+.pixel-anim-slide-left {
+  animation: pixel-slide-left var(--animation-speed-normal) steps(8) infinite;
+}
+
+.pixel-anim-bounce {
+  animation: pixel-bounce var(--animation-speed-normal) steps(8) infinite;
+}
+
+.pixel-anim-rotate {
+  animation: pixel-rotate var(--animation-speed-normal) steps(4) infinite;
+}
+
+.pixel-anim-scale {
+  animation: pixel-scale var(--animation-speed-normal) steps(8) infinite;
+}
+
+.pixel-anim-fade {
+  animation: pixel-fade var(--animation-speed-slow) steps(4) infinite;
+}
+
+.pixel-anim-shake {
+  animation: pixel-shake var(--animation-speed-fast) steps(4) infinite;
+}
+
+/* Animation Modifiers */
+.pixel-anim-once {
+  animation-iteration-count: 1;
+}
+
+.pixel-anim-twice {
+  animation-iteration-count: 2;
+}
+
+.pixel-anim-slow {
+  animation-duration: var(--animation-speed-slow);
+}
+
+.pixel-anim-fast {
+  animation-duration: var(--animation-speed-fast);
+}
+
+.pixel-anim-reverse {
+  animation-direction: reverse;
+}
+
+.pixel-anim-alternate {
+  animation-direction: alternate;
+}
+
+/* Sprite Animation Utilities */
+.sprite-sheet {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+@keyframes sprite-walk {
+  from { background-position: 0 0; }
+  to { background-position: -100%; }
+}
+
+.sprite-anim-walk {
+  animation: sprite-walk var(--animation-speed-normal) steps(4) infinite;
+}
+
+/* Transition Utilities */
+.pixel-transition {
+  transition-timing-function: steps(8);
+  transition-duration: var(--animation-speed-normal);
+}
+
+.pixel-transition-fast {
+  transition-timing-function: steps(4);
+  transition-duration: var(--animation-speed-fast);
+}
+
+.pixel-transition-slow {
+  transition-timing-function: steps(12);
+  transition-duration: var(--animation-speed-slow);
+} 
