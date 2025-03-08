@@ -104,12 +104,14 @@ export const Whiteboard: React.FC<WhiteboardProps> = ({
     };
 
     const handleSync = (data: { paths: DrawingPath[]; layers: Layer[] }) => {
+      console.log('Received whiteboard sync:', data);
       setPaths(data.paths);
       setLayers(data.layers);
       redrawCanvas();
     };
 
     const handleLayerAdd = (layer: Layer) => {
+      console.log('Received layer add:', layer);
       setLayers(prevLayers => [...prevLayers, layer]);
     };
 
@@ -681,6 +683,7 @@ export const Whiteboard: React.FC<WhiteboardProps> = ({
   }, [paths, layers]);
 
   const addLayer = useCallback(() => {
+    console.log('Adding new layer, current layers:', layers);
     const newLayer: Layer = {
       id: `layer-${Date.now()}`,
       name: `Layer ${layers.length + 1}`,
@@ -689,6 +692,7 @@ export const Whiteboard: React.FC<WhiteboardProps> = ({
       order: layers.length,
     };
 
+    console.log('Emitting new layer:', newLayer);
     emit('whiteboard:layer:add', {
       roomId,
       layer: newLayer,

@@ -5,10 +5,12 @@ import { ClientToServerEvents, ServerToClientEvents } from '../network/socket/ty
 export function useSocket() {
   useEffect(() => {
     // Connect to socket when component mounts
+    console.log('Connecting to socket...');
     socketService.connect();
 
     // Disconnect when component unmounts
     return () => {
+      console.log('Disconnecting from socket...');
       socketService.disconnect();
     };
   }, []);
@@ -17,6 +19,7 @@ export function useSocket() {
     event: T,
     ...args: Parameters<ClientToServerEvents[T]>
   ) => {
+    console.log('Emitting event:', event, 'with args:', args);
     socketService.getClient().emit(event, ...args);
   }, []);
 
@@ -24,6 +27,7 @@ export function useSocket() {
     event: T,
     handler: ServerToClientEvents[T]
   ) => {
+    console.log('Registering handler for event:', event);
     socketService.getClient().on(event, handler);
   }, []);
 

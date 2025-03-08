@@ -1,62 +1,61 @@
-import { configureStore, combineReducers, Middleware, AnyAction } from '@reduxjs/toolkit';
-import gameReducer from './slices/gameSlice';
-import { networkMiddleware } from './middleware/network';
-import { persistStore, persistReducer, PersistConfig } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import { migrationTransform, entityRegistryTransform } from './utils/persistenceTransforms';
 import { GameState } from './types';
+import gameReducer from './slices/gameSlice';
+import authReducer from './slices/authSlice';
 
 // Define root state type
-type RootState = {
+export type RootState = {
   game: GameState;
+  auth: ReturnType<typeof authReducer>;
 };
 
-// Configuration for redux-persist
-const persistConfig: PersistConfig<RootState> = {
-  key: 'devhangout',
+// Configure persistence
+const persistConfig = {
+  key: 'root',
+  version: 1,
   storage,
   // Only persist specific parts of the state
-  whitelist: ['game'],
+  whitelist: ['game', 'auth'],
   // Apply our custom transforms
   transforms: [migrationTransform, entityRegistryTransform],
-  // Version for potential future migrations
-  version: 1,
 };
 
+// Combine reducers
 const rootReducer = combineReducers({
   game: gameReducer,
+  auth: authReducer,
 });
 
-// Create a persisted reducer
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+// Create persisted reducer
+const persistedReducer = persistReducer<RootState>(persistConfig, rootReducer);
 
+// Create store
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => {
-    const middleware = getDefaultMiddleware({
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
       serializableCheck: {
-        // Ignore these action types
         ignoredActions: [
           'game/updateCharacterPosition',
-          FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER
+          FLUSH,
+          REHYDRATE,
+          PAUSE,
+          PERSIST,
+          PURGE,
+          REGISTER,
+          'persist/PERSIST',
+          'persist/REHYDRATE',
         ],
         // Ignore these field paths in all actions
-        ignoredActionPaths: ['payload.callback'],
-        // Ignore these paths in the state
-        ignoredPaths: [
-          'game.interactables.entities.*.data',
-          'game.entityRegistry.entities',
-          'game.entityRegistry.relationships'
-        ],
+        ignoredActionPaths: ['payload.timestamp', 'meta.arg'],
       },
-    });
-    return middleware.concat(networkMiddleware as Middleware<unknown, RootState>);
-  },
+    }),
 });
 
 export const persistor = persistStore(store);
 
 // Export types
-export type { RootState };
 export type AppDispatch = typeof store.dispatch;
