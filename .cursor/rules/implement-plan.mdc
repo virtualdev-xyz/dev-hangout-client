@@ -55,9 +55,9 @@ alwaysApply: false
 - [x] Implement selectors for derived states
 - [x] Build action creators and reducers
 - [x] Create debugging middleware
-- [ ] Implement state persistence
-- [ ] Set up Socket.io client
-- [ ] Create connection management system
+- [x] Implement state persistence
+- [x] Set up Socket.io client
+- [x] Create connection management system
 - [ ] Implement message serialization
 - [ ] Build reconnection logic
 - [ ] Develop request batching
