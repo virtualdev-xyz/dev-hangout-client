@@ -1,0 +1,368 @@
+import React from 'react';
+import { DiagramTemplate, DiagramTemplateType, Shape, Connection } from '../../network/socket/types';
+
+interface DiagramTemplatesProps {
+  onApplyTemplate: (template: DiagramTemplate, position: { x: number; y: number }) => void;
+}
+
+export const DiagramTemplates: React.FC<DiagramTemplatesProps> = ({ onApplyTemplate }) => {
+  const templates: DiagramTemplate[] = [
+    // Flowchart Template
+    {
+      id: 'flowchart-basic',
+      type: 'flowchart',
+      name: 'Basic Flowchart',
+      shapes: [
+        {
+          id: 'start',
+          type: 'circle',
+          x: 0,
+          y: 0,
+          width: 80,
+          height: 80,
+          color: '#4EC9B0',
+          strokeWidth: 2,
+          fill: '#2A2A2A',
+          text: 'Start',
+          fontSize: 14,
+          fontFamily: 'Source Code Pro',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          layerId: 'default',
+        },
+        {
+          id: 'process',
+          type: 'rectangle',
+          x: 0,
+          y: 120,
+          width: 160,
+          height: 60,
+          color: '#4EC9B0',
+          strokeWidth: 2,
+          fill: '#2A2A2A',
+          text: 'Process',
+          fontSize: 14,
+          fontFamily: 'Source Code Pro',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          layerId: 'default',
+        },
+        {
+          id: 'decision',
+          type: 'diamond',
+          x: 0,
+          y: 220,
+          width: 120,
+          height: 120,
+          color: '#4EC9B0',
+          strokeWidth: 2,
+          fill: '#2A2A2A',
+          text: 'Decision',
+          fontSize: 14,
+          fontFamily: 'Source Code Pro',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          layerId: 'default',
+        },
+        {
+          id: 'end',
+          type: 'circle',
+          x: 0,
+          y: 380,
+          width: 80,
+          height: 80,
+          color: '#4EC9B0',
+          strokeWidth: 2,
+          fill: '#2A2A2A',
+          text: 'End',
+          fontSize: 14,
+          fontFamily: 'Source Code Pro',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          layerId: 'default',
+        },
+      ],
+      connections: [
+        {
+          id: 'conn-1',
+          fromShapeId: 'start',
+          toShapeId: 'process',
+          type: 'solid',
+          arrowEnd: true,
+          color: '#4EC9B0',
+          width: 2,
+          layerId: 'default',
+        },
+        {
+          id: 'conn-2',
+          fromShapeId: 'process',
+          toShapeId: 'decision',
+          type: 'solid',
+          arrowEnd: true,
+          color: '#4EC9B0',
+          width: 2,
+          layerId: 'default',
+        },
+        {
+          id: 'conn-3',
+          fromShapeId: 'decision',
+          toShapeId: 'end',
+          type: 'solid',
+          arrowEnd: true,
+          color: '#4EC9B0',
+          width: 2,
+          layerId: 'default',
+        },
+      ],
+    },
+    // Architecture Template
+    {
+      id: 'architecture-3tier',
+      type: 'architecture',
+      name: '3-Tier Architecture',
+      shapes: [
+        {
+          id: 'client',
+          type: 'rectangle',
+          x: 0,
+          y: 0,
+          width: 120,
+          height: 60,
+          color: '#4EC9B0',
+          strokeWidth: 2,
+          fill: '#2A2A2A',
+          text: 'Client',
+          fontSize: 14,
+          fontFamily: 'Source Code Pro',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          layerId: 'default',
+        },
+        {
+          id: 'server',
+          type: 'server',
+          x: 0,
+          y: 120,
+          width: 120,
+          height: 160,
+          color: '#4EC9B0',
+          strokeWidth: 2,
+          fill: '#2A2A2A',
+          text: 'Application\nServer',
+          fontSize: 14,
+          fontFamily: 'Source Code Pro',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          layerId: 'default',
+        },
+        {
+          id: 'database',
+          type: 'database',
+          x: 0,
+          y: 320,
+          width: 100,
+          height: 120,
+          color: '#4EC9B0',
+          strokeWidth: 2,
+          fill: '#2A2A2A',
+          text: 'Database',
+          fontSize: 14,
+          fontFamily: 'Source Code Pro',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          layerId: 'default',
+        },
+      ],
+      connections: [
+        {
+          id: 'conn-1',
+          fromShapeId: 'client',
+          toShapeId: 'server',
+          type: 'solid',
+          arrowStart: true,
+          arrowEnd: true,
+          label: 'HTTP/WS',
+          color: '#4EC9B0',
+          width: 2,
+          layerId: 'default',
+        },
+        {
+          id: 'conn-2',
+          fromShapeId: 'server',
+          toShapeId: 'database',
+          type: 'solid',
+          arrowStart: true,
+          arrowEnd: true,
+          label: 'SQL',
+          color: '#4EC9B0',
+          width: 2,
+          layerId: 'default',
+        },
+      ],
+    },
+    // Sequence Template
+    {
+      id: 'sequence-basic',
+      type: 'sequence',
+      name: 'Basic Sequence',
+      shapes: [
+        {
+          id: 'client',
+          type: 'rectangle',
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 40,
+          color: '#4EC9B0',
+          strokeWidth: 2,
+          fill: '#2A2A2A',
+          text: 'Client',
+          fontSize: 14,
+          fontFamily: 'Source Code Pro',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          layerId: 'default',
+        },
+        {
+          id: 'server',
+          type: 'rectangle',
+          x: 200,
+          y: 0,
+          width: 100,
+          height: 40,
+          color: '#4EC9B0',
+          strokeWidth: 2,
+          fill: '#2A2A2A',
+          text: 'Server',
+          fontSize: 14,
+          fontFamily: 'Source Code Pro',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          layerId: 'default',
+        },
+      ],
+      connections: [
+        {
+          id: 'conn-1',
+          fromShapeId: 'client',
+          toShapeId: 'server',
+          type: 'solid',
+          arrowEnd: true,
+          label: 'Request',
+          color: '#4EC9B0',
+          width: 2,
+          layerId: 'default',
+        },
+        {
+          id: 'conn-2',
+          fromShapeId: 'server',
+          toShapeId: 'client',
+          type: 'dashed',
+          arrowEnd: true,
+          label: 'Response',
+          color: '#4EC9B0',
+          width: 2,
+          layerId: 'default',
+        },
+      ],
+    },
+    // ERD Template
+    {
+      id: 'erd-basic',
+      type: 'erd',
+      name: 'Basic ERD',
+      shapes: [
+        {
+          id: 'entity1',
+          type: 'rectangle',
+          x: 0,
+          y: 0,
+          width: 120,
+          height: 60,
+          color: '#4EC9B0',
+          strokeWidth: 2,
+          fill: '#2A2A2A',
+          text: 'Entity 1',
+          fontSize: 14,
+          fontFamily: 'Source Code Pro',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          layerId: 'default',
+        },
+        {
+          id: 'entity2',
+          type: 'rectangle',
+          x: 200,
+          y: 0,
+          width: 120,
+          height: 60,
+          color: '#4EC9B0',
+          strokeWidth: 2,
+          fill: '#2A2A2A',
+          text: 'Entity 2',
+          fontSize: 14,
+          fontFamily: 'Source Code Pro',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          layerId: 'default',
+        },
+      ],
+      connections: [
+        {
+          id: 'conn-1',
+          fromShapeId: 'entity1',
+          toShapeId: 'entity2',
+          type: 'solid',
+          arrowStart: true,
+          arrowEnd: true,
+          label: '1:N',
+          color: '#4EC9B0',
+          width: 2,
+          layerId: 'default',
+        },
+      ],
+    },
+  ];
+
+  const handleDragStart = (template: DiagramTemplate) => (event: React.DragEvent) => {
+    event.dataTransfer.setData('template', JSON.stringify(template));
+  };
+
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '8px',
+      padding: '8px',
+    }}>
+      <h3 style={{
+        margin: 0,
+        color: '#D4D4D4',
+        fontSize: '14px',
+        fontFamily: '"Source Code Pro", monospace',
+      }}>
+        Diagram Templates
+      </h3>
+      
+      {templates.map(template => (
+        <div
+          key={template.id}
+          draggable
+          onDragStart={handleDragStart(template)}
+          style={{
+            padding: '8px',
+            backgroundColor: '#2A2A2A',
+            border: '1px solid #333',
+            borderRadius: '4px',
+            cursor: 'grab',
+            color: '#D4D4D4',
+            fontSize: '12px',
+            fontFamily: '"Source Code Pro", monospace',
+          }}
+        >
+          {template.name}
+        </div>
+      ))}
+    </div>
+  );
+}; 

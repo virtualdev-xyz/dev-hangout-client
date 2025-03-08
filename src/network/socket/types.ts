@@ -37,13 +37,66 @@ export interface DrawingPoint {
   pressure?: number;
 }
 
+export type ShapeType = 'rectangle' | 'circle' | 'line' | 'diamond' | 'database' | 'cloud' | 'server' | 'arrow';
+
+export type DiagramTemplateType = 'flowchart' | 'sequence' | 'architecture' | 'erd' | 'usecase';
+
+export interface DiagramTemplate {
+  id: string;
+  type: DiagramTemplateType;
+  name: string;
+  shapes: Shape[];
+  connections: Connection[];
+}
+
+export interface Connection {
+  id: string;
+  fromShapeId: string;
+  toShapeId: string;
+  type: 'solid' | 'dashed' | 'dotted';
+  arrowStart?: boolean;
+  arrowEnd?: boolean;
+  label?: string;
+  color: string;
+  width: number;
+  layerId: string;
+}
+
+export interface Shape {
+  id: string;
+  type: ShapeType;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: string;
+  strokeWidth: number;
+  fill?: string;
+  layerId: string;
+  text?: string;
+  fontSize?: number;
+  fontFamily?: string;
+  textAlign?: 'left' | 'center' | 'right';
+  textBaseline?: 'top' | 'middle' | 'bottom';
+}
+
+export interface Layer {
+  id: string;
+  name: string;
+  visible: boolean;
+  locked: boolean;
+  order: number;
+}
+
 export interface DrawingPath {
   id: string;
   userId: string;
   color: string;
   points: DrawingPoint[];
-  tool: 'pen' | 'eraser';
+  tool: 'pen' | 'eraser' | 'shape';
   width: number;
+  layerId: string;
+  shape?: Shape;
 }
 
 export interface ServerToClientEvents {
@@ -80,8 +133,15 @@ export interface ServerToClientEvents {
 
   // Whiteboard events
   'whiteboard:path': (path: DrawingPath) => void;
-  'whiteboard:sync': (paths: DrawingPath[]) => void;
+  'whiteboard:sync': (data: { paths: DrawingPath[]; layers: Layer[]; templates: DiagramTemplate[] }) => void;
   'whiteboard:clear': () => void;
+  'whiteboard:layer:add': (layer: Layer) => void;
+  'whiteboard:layer:update': (layer: Layer) => void;
+  'whiteboard:layer:delete': (layerId: string) => void;
+  'whiteboard:shape:update': (shape: Shape) => void;
+  'whiteboard:shape:delete': (shapeId: string) => void;
+  'whiteboard:template:add': (template: DiagramTemplate) => void;
+  'whiteboard:template:apply': (data: { shapes: Shape[]; connections: Connection[] }) => void;
 
   // Error events
   'error': (error: { code: string; message: string }) => void;
@@ -118,6 +178,13 @@ export interface ClientToServerEvents {
   'whiteboard:leave': (roomId: string) => void;
   'whiteboard:path': (data: { roomId: string; path: DrawingPath }) => void;
   'whiteboard:clear': (roomId: string) => void;
+  'whiteboard:layer:add': (data: { roomId: string; layer: Layer }) => void;
+  'whiteboard:layer:update': (data: { roomId: string; layer: Layer }) => void;
+  'whiteboard:layer:delete': (data: { roomId: string; layerId: string }) => void;
+  'whiteboard:shape:update': (data: { roomId: string; shape: Shape }) => void;
+  'whiteboard:shape:delete': (data: { roomId: string; shapeId: string }) => void;
+  'whiteboard:template:add': (data: { roomId: string; template: DiagramTemplate }) => void;
+  'whiteboard:template:apply': (data: { roomId: string; templateId: string; position: { x: number; y: number } }) => void;
 }
 
 export interface SocketOptions {

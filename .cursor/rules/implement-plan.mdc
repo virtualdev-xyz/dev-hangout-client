@@ -74,8 +74,8 @@ alwaysApply: false
 - [x] Build version history visualization
 - [x] Implement file browser with pixel art icons
 - [x] Create pixel art whiteboard canvas
-- [ ] Implement collaborative drawing tools
-- [ ] Build technical diagram templates
+- [x] Implement collaborative drawing tools
+- [x] Build technical diagram templates
 - [ ] Create shape and connector tools
 - [ ] Set up WebRTC with simple-peer
 - [ ] Implement WebSocket signaling
