@@ -1,24 +1,16 @@
 import React from 'react';
+import { AppRouter } from './routes';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { store, persistor } from './state/store';
-import { AppRoutes } from './routes';
+import { store } from './state/store';
 import { PersistGate } from 'redux-persist/integration/react';
-import { LoadingScreen } from './components/ui/LoadingScreen';
-import { UIDemo } from './components/ui/demo/UIDemo';
+import { persistor } from './state/store';
 
-export default function App() {
-  // For demonstration purposes, we're showing the UIDemo component
-  // In a real app, you would use the AppRoutes component
-  const showDemo = true;
-
+export const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <PersistGate loading={<LoadingScreen />} persistor={persistor}>
-        <BrowserRouter>
-          {showDemo ? <UIDemo /> : <AppRoutes />}
-        </BrowserRouter>
+      <PersistGate loading={null} persistor={persistor}>
+        <AppRouter />
       </PersistGate>
     </Provider>
   );
-}
+};

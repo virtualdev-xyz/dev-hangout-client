@@ -1,5 +1,6 @@
 import { Entity } from '../../systems/entities/EntityRegistry';
 import { Position } from '../../state/types';
+import { editor } from 'monaco-editor';
 
 export interface PlayerState {
   id: string;
@@ -11,6 +12,38 @@ export interface PlayerState {
     name: string;
     color: string;
   };
+}
+
+export interface EditorChange {
+  roomId: string;
+  changes: editor.IModelContentChange[];
+  version: number;
+  timestamp: number;
+}
+
+export interface FileNode {
+  id: string;
+  name: string;
+  type: 'file' | 'directory';
+  children?: FileNode[];
+  content?: string;
+  icon?: string;
+  extension?: string;
+}
+
+export interface DrawingPoint {
+  x: number;
+  y: number;
+  pressure?: number;
+}
+
+export interface DrawingPath {
+  id: string;
+  userId: string;
+  color: string;
+  points: DrawingPoint[];
+  tool: 'pen' | 'eraser';
+  width: number;
 }
 
 export interface ServerToClientEvents {
@@ -34,6 +67,22 @@ export interface ServerToClientEvents {
   'entity:deleted': (entityId: string) => void;
   'entities:sync': (entities: Entity[]) => void;
 
+  // Editor events
+  'editor:change': (change: EditorChange) => void;
+  'editor:sync': (content: string) => void;
+  'editor:cursor': (data: { userId: string; position: Position }) => void;
+
+  // File system events
+  'files:list': (files: FileNode[]) => void;
+  'files:updated': (file: FileNode) => void;
+  'files:created': (file: FileNode) => void;
+  'files:deleted': (fileId: string) => void;
+
+  // Whiteboard events
+  'whiteboard:path': (path: DrawingPath) => void;
+  'whiteboard:sync': (paths: DrawingPath[]) => void;
+  'whiteboard:clear': () => void;
+
   // Error events
   'error': (error: { code: string; message: string }) => void;
 }
@@ -51,6 +100,24 @@ export interface ClientToServerEvents {
   // Room events
   'room:join': (roomId: string) => void;
   'room:leave': (roomId: string) => void;
+
+  // Editor events
+  'editor:change': (change: EditorChange) => void;
+  'editor:cursor': (data: { roomId: string; position: Position }) => void;
+  'editor:join': (roomId: string) => void;
+  'editor:leave': (roomId: string) => void;
+
+  // File system events
+  'files:list': (options: { path: string }) => void;
+  'files:update': (file: Partial<FileNode>) => void;
+  'files:create': (file: Omit<FileNode, 'id'>) => void;
+  'files:delete': (fileId: string) => void;
+
+  // Whiteboard events
+  'whiteboard:join': (roomId: string) => void;
+  'whiteboard:leave': (roomId: string) => void;
+  'whiteboard:path': (data: { roomId: string; path: DrawingPath }) => void;
+  'whiteboard:clear': (roomId: string) => void;
 }
 
 export interface SocketOptions {

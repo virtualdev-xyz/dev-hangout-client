@@ -1,15 +1,26 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { DevWorkspace } from '../pages/DevWorkspace';
 
-// Import your page components here
-// import { HomePage } from '../pages/HomePage';
-// import { GamePage } from '../pages/GamePage';
+// Mock user data - in a real app, this would come from authentication
+const mockUser = {
+  id: 'user-1',
+  name: 'Developer',
+};
 
-export const AppRoutes: React.FC = () => {
+export const AppRouter: React.FC = () => {
   return (
-    <Routes>
-      <Route path="/" element={<div>Home Page</div>} />
-      {/* Add more routes as needed */}
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/workspace/:roomId"
+          element={<DevWorkspace roomId={window.location.pathname.split('/').pop() || 'default'} userId={mockUser.id} />}
+        />
+        <Route
+          path="/"
+          element={<Navigate to="/workspace/default" replace />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 };
