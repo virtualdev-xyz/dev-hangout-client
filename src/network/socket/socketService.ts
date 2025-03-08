@@ -49,7 +49,7 @@ export const socketService = SocketService.getInstance();
 
 // Initialize socket service with default options
 socketService.initialize({
-  url: process.env.VITE_SOCKET_URL || 'http://localhost:3000',
+  url: import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000',
   autoConnect: true,
   reconnection: true,
   reconnectionAttempts: 5,
