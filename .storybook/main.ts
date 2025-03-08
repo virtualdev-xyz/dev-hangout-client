@@ -7,7 +7,14 @@ const config: StorybookConfig = {
     '@storybook/addon-essentials',
     '@storybook/addon-a11y',
     '@storybook/addon-viewport',
-    '@storybook/addon-docs'
+    '@storybook/addon-docs',
+    '@storybook/addon-styling',
+    {
+      name: '@storybook/addon-styling',
+      options: {
+        postCss: true,
+      },
+    },
   ],
   framework: {
     name: '@storybook/react-vite',
@@ -19,6 +26,18 @@ const config: StorybookConfig = {
   core: {
     builder: '@storybook/builder-vite',
   },
-}
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
+    reactDocgenTypescriptOptions: {
+      compilerOptions: {
+        allowSyntheticDefaultImports: false,
+        esModuleInterop: false,
+      },
+      propFilter: {
+        skipPropsWithoutDoc: false,
+      },
+    },
+  },
+};
 
 export default config; 

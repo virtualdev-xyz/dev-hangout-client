@@ -21,15 +21,15 @@ alwaysApply: false
 - [x] Create 8px grid system with CSS custom properties
 - [x] Build base UI component architecture
 - [x] Implement arcade cabinet dark theme
-- [ ] Create animation utilities for pixel effects
-- [ ] Develop foundational UI components:
-  - [ ] Pixel-perfect buttons
-  - [ ] Terminal-style inputs
-  - [ ] Dialog boxes with ASCII borders
-  - [ ] Game cards with pixel frames
-  - [ ] 8-bit menus with selector arrows
-  - [ ] Status indicators and messages
-- [ ] Set up Storybook for component documentation
+- [x] Create animation utilities for pixel effects
+- [x] Develop foundational UI components:
+  - [x] Pixel-perfect buttons
+  - [x] Terminal-style inputs
+  - [x] Dialog boxes with ASCII borders
+  - [x] Game cards with pixel frames
+  - [x] 8-bit menus with selector arrows
+  - [x] Status indicators and messages
+- [x] Set up Storybook for component documentation
 
 ## Phase 2: Canvas & Movement
 - [x] Set up PixiJS integration with React
