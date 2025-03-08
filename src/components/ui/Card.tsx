@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { retroTheme } from '../../../styles/theme';
+import { retroTheme } from '../../styles/theme';
 
 interface CardProps {
   variant?: 'default' | 'highlight' | 'bordered';
