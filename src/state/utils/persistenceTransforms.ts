@@ -1,37 +1,56 @@
 import { createTransform } from 'redux-persist';
 import { RootState } from '../store';
 
+interface Entity {
+  id: string;
+  type: string;
+  data: Record<string, any>;
+}
+
+interface GameState {
+  entityRegistry?: {
+    entities: Record<string, Entity>;
+    relationships: Set<string>;
+  };
+  [key: string]: any;
+}
+
+interface SerializedGameState {
+  entityRegistry: {
+    entities: Record<string, Entity>;
+    relationships: string[];
+  };
+  [key: string]: any;
+}
+
 /**
  * Transform to handle migrations between different versions of the state structure
  */
 export const migrationTransform = createTransform(
   // transform state on its way to being serialized and persisted
-  (inboundState, key) => {
-    // Add app version to state for future migrations
-    if (key === 'game') {
-      return {
-        ...inboundState,
-        _persistVersion: process.env.npm_package_version || '1.0.0',
-      };
-    }
-    return inboundState;
+  (inboundState: GameState, key) => {
+    // Add version info to the state
+    return {
+      ...inboundState,
+      _version: 1,
+    };
   },
   
   // transform state being rehydrated
-  (outboundState, key) => {
-    if (key === 'game') {
-      const persistedVersion = (outboundState as any)._persistVersion || '1.0.0';
-      const currentVersion = process.env.npm_package_version || '1.0.0';
-      
-      // In the future, we can add migration logic here
-      // if (persistedVersion !== currentVersion) {
-      //   // Apply migrations based on version differences
-      // }
-      
-      // Remove version info from rehydrated state
-      const { _persistVersion, ...stateWithoutVersion } = outboundState as any;
-      return stateWithoutVersion;
+  (outboundState: GameState & { _version?: number }, key) => {
+    const currentVersion = 1;
+    const stateVersion = outboundState._version || 0;
+
+    // Handle migrations based on version differences
+    if (stateVersion < currentVersion) {
+      // Perform any necessary migrations here
+      // For now, we just ensure the state structure is correct
+      return {
+        ...outboundState,
+        _version: currentVersion,
+      };
     }
+
     return outboundState;
   },
   { whitelist: ['game'] }
@@ -42,27 +61,56 @@ export const migrationTransform = createTransform(
  */
 export const entityRegistryTransform = createTransform(
   // On state serialization (before saving)
-  (inboundState, key) => {
-    if (key === 'game') {
-      // No special handling needed - we've already made the structure serializable
-      return inboundState;
+  (inboundState: GameState, key): SerializedGameState => {
+    if (key === 'game' && inboundState.entityRegistry) {
+      // Serialize entity relationships and data
+      return {
+        ...inboundState,
+        entityRegistry: {
+          entities: Object.fromEntries(
+            Object.entries(inboundState.entityRegistry.entities || {}).map(([id, entity]) => [
+              id,
+              {
+                ...entity,
+                // Convert any special types or class instances to plain objects
+                data: JSON.parse(JSON.stringify(entity.data || {})),
+              },
+            ])
+          ),
+          relationships: Array.from(inboundState.entityRegistry.relationships || []),
+        },
+      };
     }
-    return inboundState;
+    // Return a default serialized state if entityRegistry is undefined
+    return {
+      ...inboundState,
+      entityRegistry: {
+        entities: {},
+        relationships: [],
+      },
+    };
   },
   
   // On state rehydration (after loading)
-  (outboundState, key) => {
+  (outboundState: SerializedGameState, key): GameState => {
     if (key === 'game') {
-      const state = outboundState as any;
-      
-      // Convert the entityRegistry back if needed
-      // We're already using a serializable structure,
-      // but this is where we would do any special 
-      // reconstruction if needed
-      
-      return state;
+      // Reconstruct entity relationships and data
+      return {
+        ...outboundState,
+        entityRegistry: {
+          entities: outboundState.entityRegistry.entities,
+          // Convert relationship array back to Set if needed
+          relationships: new Set(outboundState.entityRegistry.relationships),
+        },
+      };
     }
-    return outboundState;
+    return {
+      ...outboundState,
+      entityRegistry: {
+        entities: {},
+        relationships: new Set(),
+      },
+    };
   },
   { whitelist: ['game'] }
 );

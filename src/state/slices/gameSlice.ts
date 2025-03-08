@@ -1,17 +1,23 @@
 import { createSlice, createEntityAdapter, PayloadAction } from '@reduxjs/toolkit';
-import { Character, InteractableEntity, GameState, Position, SerializedEntityRegistry } from '../types';
+import { Character, InteractableEntity, GameState, Position, SerializedEntityRegistry, Entity } from '../types';
 import { RootState } from '../store';
 import { Direction, CharacterState } from '../../systems/rendering/sprites/CharacterSprite';
-import { Entity, EntityType } from '../../systems/entities/EntityRegistry';
-import { RelationType } from '../../systems/entities/EntityRelationship';
+import { EntityType } from '../../systems/entities/EntityRegistry';
+import { RelationType, Relationship } from '../../systems/entities/EntityRelationship';
 
 const charactersAdapter = createEntityAdapter<Character>();
 const interactablesAdapter = createEntityAdapter<InteractableEntity>();
 
 // Serializable initial state
 const initialState: GameState = {
-  characters: charactersAdapter.getInitialState(),
-  interactables: interactablesAdapter.getInitialState(),
+  characters: {
+    ids: [],
+    entities: {},
+  },
+  interactables: {
+    ids: [],
+    entities: {},
+  },
   player: {
     characterId: null,
     isInteracting: false,
@@ -24,7 +30,7 @@ const initialState: GameState = {
   },
 };
 
-export const gameSlice = createSlice({
+const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
@@ -70,10 +76,10 @@ export const gameSlice = createSlice({
     },
 
     // Player actions
-    setPlayerCharacter: (state, action: PayloadAction<string>) => {
+    setPlayerCharacter: (state, action: PayloadAction<string | null>) => {
       state.player.characterId = action.payload;
     },
-    setPlayerPosition: (state, action: PayloadAction<Position>) => {
+    setPlayerPosition: (state, action: PayloadAction<{ x: number; y: number }>) => {
       state.player.position = action.payload;
     },
     setNearbyInteractable: (state, action: PayloadAction<string | null>) => {
@@ -84,12 +90,33 @@ export const gameSlice = createSlice({
     },
 
     // Entity Registry actions
-    registerEntity: (state, action: PayloadAction<Entity>) => {
-      state.entityRegistry.entities[action.payload.id] = action.payload;
+    addEntity: (state, action: PayloadAction<Entity>) => {
+      const entity = action.payload;
+      state.entityRegistry.entities[entity.id] = {
+        id: entity.id,
+        type: entity.type as EntityType,
+        data: entity.data,
+      };
     },
-    unregisterEntity: (state, action: PayloadAction<string>) => {
-      delete state.entityRegistry.entities[action.payload];
-      delete state.entityRegistry.relationships[action.payload];
+    updateEntity: (state, action: PayloadAction<Entity>) => {
+      const entity = action.payload;
+      if (state.entityRegistry.entities[entity.id]) {
+        state.entityRegistry.entities[entity.id] = {
+          ...state.entityRegistry.entities[entity.id],
+          type: entity.type as EntityType,
+          data: entity.data,
+        };
+      }
+    },
+    removeEntity: (state, action: PayloadAction<string>) => {
+      const entityId = action.payload;
+      delete state.entityRegistry.entities[entityId];
+      // Remove any relationships involving this entity
+      Object.entries(state.entityRegistry.relationships).forEach(([key, relationships]) => {
+        state.entityRegistry.relationships[key] = relationships.filter(
+          (rel: Relationship) => rel.sourceId !== entityId && rel.targetId !== entityId
+        );
+      });
     },
     addEntityRelationship: (
       state,
@@ -138,9 +165,10 @@ export const {
   setPlayerPosition,
   setNearbyInteractable,
   setInteracting,
-  registerEntity,
-  unregisterEntity,
+  addEntity,
+  updateEntity,
+  removeEntity,
   addEntityRelationship,
 } = gameSlice.actions;
 
-export const gameReducer = gameSlice.reducer;
+export default gameSlice.reducer;

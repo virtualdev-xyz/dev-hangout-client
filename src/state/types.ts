@@ -61,3 +61,31 @@ export interface GameState {
   };
   entityRegistry: SerializedEntityRegistry;
 }
+
+export interface Entity {
+  id: string;
+  type: string;
+  data: Record<string, any>;
+  position?: {
+    x: number;
+    y: number;
+  };
+  metadata?: {
+    createdAt: number;
+    updatedAt: number;
+    createdBy: string;
+    updatedBy: string;
+  };
+}
+
+export interface EntityRelationship {
+  sourceId: string;
+  targetId: string;
+  type: string;
+  metadata?: Record<string, any>;
+}
+
+export interface EntityRegistry {
+  entities: Record<string, Entity>;
+  relationships: Set<string>;
+}
