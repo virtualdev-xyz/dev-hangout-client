@@ -19,6 +19,9 @@ export const checkSession = createAsyncThunk(
   async () => {
     const response = await fetch(API_ROUTES.AUTH.SESSION, {
       credentials: 'include',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      }
     });
     if (!response.ok) {
       throw new Error('Session check failed');
