@@ -55,6 +55,7 @@ export function Signup() {
           autoComplete="email"
           required
           label="Email address"
+          placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={error || undefined}
@@ -66,6 +67,7 @@ export function Signup() {
           autoComplete="new-password"
           required
           label="Password"
+          placeholder="Enter your password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
