@@ -6,21 +6,40 @@ interface DividerProps {
 }
 
 export const Divider = ({ children, variant = 'primary' }: DividerProps) => {
-  const lineColor = variant === 'primary' ? 'border-crtBlue' : 'border-magenta';
-  const textColor = variant === 'primary' ? 'text-crtBlue' : 'text-magenta';
+  const lineColor = variant === 'primary' ? '#4EC9B0' : '#FF00FF';
+  const textColor = variant === 'primary' ? '#4EC9B0' : '#FF00FF';
 
   return (
-    <div className="relative">
-      <div className="absolute inset-0 flex items-center">
-        <div className={`w-full border-t-2 ${lineColor} border-pixelDashed`} />
+    <div style={{ position: 'relative' }}>
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        <div style={{
+          width: '100%',
+          borderTop: `2px dashed ${lineColor}`
+        }} />
       </div>
       {children && (
-        <div className="relative flex justify-center">
-          <span className={`px-2 bg-spaceBlack ${textColor} font-subheading text-sm`}>
+        <div style={{
+          position: 'relative',
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
+          <span style={{
+            paddingLeft: '8px',
+            paddingRight: '8px',
+            backgroundColor: '#1E1E1E',
+            color: textColor,
+            fontFamily: '"Press Start 2P", monospace',
+            fontSize: '14px'
+          }}>
             {children}
           </span>
         </div>
       )}
     </div>
   );
-} 
+}

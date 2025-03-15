@@ -27,7 +27,6 @@
   gap: var(--grid-1);
   background-color: rgba(0, 0, 0, 0.7);
   border: 2px solid var(--arcade-border-primary);
-  padding: var(--grid-1);
   transition: all 0.2s steps(4);
 }
 
@@ -143,11 +142,11 @@
 }
 
 /* Error State */
-.input--error ~ .inputWrapper {
+.container--error .inputWrapper {
   border-color: var(--arcade-status-error);
   box-shadow: var(--arcade-shadow-box);
 }
 
-.input--error ~ .inputWrapper:focus-within {
+.container--error .inputWrapper:focus-within {
   box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
 } 

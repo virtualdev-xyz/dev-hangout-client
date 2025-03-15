@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../state/store';
 import { resetPassword, clearError } from '../../state/slices/authSlice';
+import { retroTheme } from '../../styles/theme';
 
 export function ResetPassword() {
   const [email, setEmail] = useState('');
@@ -26,21 +27,21 @@ export function ResetPassword() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3rem 1rem' }}>
+        <div style={{ maxWidth: '28rem', width: '100%' }}>
           <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            <h2 style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '1.875rem', fontWeight: 800 }}>
               Check your email
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
+            <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>
               We've sent you instructions to reset your password. Please check your
               email.
             </p>
           </div>
-          <div className="text-center">
+          <div style={{ textAlign: 'center' }}>
             <Link
               to="/login"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
+              style={{ fontWeight: 500, color: retroTheme.colors.vhsBlue }}
               onClick={() => dispatch(clearError())}
             >
               Return to login
@@ -52,20 +53,20 @@ export function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3rem 1rem' }}>
+      <div style={{ maxWidth: '28rem', width: '100%' }}>
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '1.875rem', fontWeight: 800 }}>
             Reset your password
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>
             Enter your email address and we'll send you instructions to reset your
             password.
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form style={{ marginTop: '2rem' }} onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="email-address" className="sr-only">
+            <label htmlFor="email-address" style={{ display: 'none' }}>
               Email address
             </label>
             <input
@@ -74,7 +75,13 @@ export function ResetPassword() {
               type="email"
               autoComplete="email"
               required
-              className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              style={{
+                width: '100%',
+                padding: '0.5rem 0.75rem',
+                border: '1px solid #d1d5db',
+                borderRadius: '0.375rem',
+                fontSize: '0.875rem'
+              }}
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -82,14 +89,16 @@ export function ResetPassword() {
           </div>
 
           {error && (
-            <div className="text-red-600 text-sm text-center">{error}</div>
+            <div style={{ color: retroTheme.colors.errorRed, fontSize: '0.875rem', textAlign: 'center', marginTop: '1rem' }}>
+              {error}
+            </div>
           )}
 
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+            <div>
               <Link
                 to="/login"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
+                style={{ fontWeight: 500, color: retroTheme.colors.vhsBlue }}
                 onClick={() => dispatch(clearError())}
               >
                 Remember your password?
@@ -97,11 +106,24 @@ export function ResetPassword() {
             </div>
           </div>
 
-          <div>
+          <div style={{ marginTop: '1rem' }}>
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                padding: '0.5rem 1rem',
+                border: 'none',
+                borderRadius: '0.375rem',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                color: '#ffffff',
+                backgroundColor: retroTheme.colors.vhsBlue,
+                opacity: isLoading ? 0.5 : 1,
+                cursor: isLoading ? 'not-allowed' : 'pointer'
+              }}
             >
               {isLoading ? 'Sending instructions...' : 'Send reset instructions'}
             </button>
@@ -110,4 +132,4 @@ export function ResetPassword() {
       </div>
     </div>
   );
-} 
+}

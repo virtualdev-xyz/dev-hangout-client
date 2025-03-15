@@ -24,8 +24,21 @@ export function ProtectedRoute({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{
+          width: '2rem',
+          height: '2rem',
+          borderRadius: '50%',
+          borderTop: '2px solid',
+          borderBottom: '2px solid',
+          borderColor: '#6366f1',
+          animation: 'spin 1s linear infinite'
+        }}></div>
       </div>
     );
   }
@@ -41,4 +54,4 @@ export function ProtectedRoute({
   }
 
   return <>{children}</>;
-} 
+}

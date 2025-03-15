@@ -215,7 +215,6 @@ body.arcade-theme::after {
 .arcade-theme select {
   background-color: rgba(0, 0, 0, 0.7);
   color: var(--arcade-text-secondary);
-  border: 2px solid var(--arcade-border-primary);
   padding: var(--grid-1);
   font-family: var(--font-terminal);
   box-shadow: var(--arcade-shadow-inset);
@@ -226,7 +225,6 @@ body.arcade-theme::after {
 .arcade-theme input:focus,
 .arcade-theme textarea:focus,
 .arcade-theme select:focus {
-  border-color: var(--arcade-text-primary);
   outline: none;
   box-shadow: var(--arcade-glow-blue);
 }
