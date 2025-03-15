@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { User } from '../../types/user';
+import { API_ROUTES } from '../../config/api';
 
 interface AuthState {
   user: User | null;
@@ -16,7 +17,7 @@ const initialState: AuthState = {
 export const checkSession = createAsyncThunk(
   'auth/checkSession',
   async () => {
-    const response = await fetch('/api/auth/session', {
+    const response = await fetch(API_ROUTES.AUTH.SESSION, {
       credentials: 'include',
     });
     if (!response.ok) {
@@ -30,7 +31,7 @@ export const checkSession = createAsyncThunk(
 export const login = createAsyncThunk(
   'auth/login',
   async ({ email, password }: { email: string; password: string }) => {
-    const response = await fetch('/api/auth/login', {
+    const response = await fetch(API_ROUTES.AUTH.LOGIN, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -54,7 +55,7 @@ export const loginWithGithub = createAsyncThunk(
       const left = window.screenX + (window.outerWidth - width) / 2;
       const top = window.screenY + (window.outerHeight - height) / 2;
       const popup = window.open(
-        '/api/auth/github',
+        API_ROUTES.AUTH.GITHUB,
         'github-oauth',
         `width=${width},height=${height},left=${left},top=${top}`
       );
@@ -84,17 +85,15 @@ export const signup = createAsyncThunk(
   async ({
     email,
     password,
-    username,
   }: {
     email: string;
     password: string;
-    username: string;
   }) => {
-    const response = await fetch('/api/auth/signup', {
+    const response = await fetch(API_ROUTES.AUTH.SIGNUP, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ email, password, username }),
+      body: JSON.stringify({ email, password }),
     });
     if (!response.ok) {
       const data = await response.json();
@@ -106,7 +105,7 @@ export const signup = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk('auth/logout', async () => {
-  await fetch('/api/auth/logout', {
+  await fetch(API_ROUTES.AUTH.LOGOUT, {
     method: 'POST',
     credentials: 'include',
   });
@@ -115,7 +114,7 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 export const resetPassword = createAsyncThunk(
   'auth/resetPassword',
   async (email: string) => {
-    const response = await fetch('/api/auth/reset-password', {
+    const response = await fetch(API_ROUTES.AUTH.RESET_PASSWORD, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),

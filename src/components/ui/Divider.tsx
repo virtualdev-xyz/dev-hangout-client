@@ -5,7 +5,7 @@ interface DividerProps {
   variant?: 'primary' | 'secondary';
 }
 
-export function Divider({ children, variant = 'primary' }: DividerProps) {
+export const Divider = ({ children, variant = 'primary' }: DividerProps) => {
   const lineColor = variant === 'primary' ? 'border-crtBlue' : 'border-magenta';
   const textColor = variant === 'primary' ? 'text-crtBlue' : 'text-magenta';
 

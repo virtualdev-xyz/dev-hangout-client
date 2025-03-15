@@ -3,7 +3,7 @@ interface AlertProps {
   variant?: 'error' | 'success' | 'warning';
 }
 
-export function Alert({ children, variant = 'error' }: AlertProps) {
+export const Alert = ({ children, variant = 'error' }: AlertProps) => {
   const variantStyles = {
     error: 'bg-digitalRed/20 text-digitalRed border-digitalRed',
     success: 'bg-powerUpGreen/20 text-powerUpGreen border-powerUpGreen',
