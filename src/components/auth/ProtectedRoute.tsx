@@ -1,9 +1,6 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../../state/store';
-import { checkSession } from '../../state/slices/authSlice';
-import { useDispatch } from 'react-redux';
+import { useAuth } from '../../state/AuthContext';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -14,13 +11,8 @@ export function ProtectedRoute({
   children,
   requireAuth = true,
 }: ProtectedRouteProps) {
-  const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
-  const { user, loading } = useSelector((state: RootState) => state.auth);
-
-  useEffect(() => {
-    dispatch(checkSession());
-  }, [dispatch]);
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (

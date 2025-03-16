@@ -1,15 +1,17 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User } from '../types/user';
+import { API_ROUTES } from '../config/api';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
-  loginWithGithub: () => Promise<void>;
+  loginWithGithub: () => void;
   logout: () => Promise<void>;
   signup: (email: string, password: string, username: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  setTokens: (accessToken: string, refreshToken: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,12 +25,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Check for existing session
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/auth/session', {
+        const response = await fetch(API_ROUTES.AUTH.SESSION, {
           credentials: 'include',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          }
         });
         if (response.ok) {
           const data = await response.json();
-          setUser(data.user);
+          setUser(data);
         }
       } catch (err) {
         console.error('Session check failed:', err);
@@ -43,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     try {
       setError(null);
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(API_ROUTES.AUTH.LOGIN, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -63,54 +68,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const loginWithGithub = async () => {
-    try {
-      setError(null);
-      // Open GitHub OAuth login in a popup
-      const width = 600;
-      const height = 700;
-      const left = window.screenX + (window.outerWidth - width) / 2;
-      const top = window.screenY + (window.outerHeight - height) / 2;
-      const popup = window.open(
-        '/api/auth/github',
-        'github-oauth',
-        `width=${width},height=${height},left=${left},top=${top}`
-      );
+  const loginWithGithub = () => {
+    // Simply redirect to the backend GitHub auth endpoint
+    window.location.href = API_ROUTES.AUTH.GITHUB;
+  };
 
-      if (!popup) {
-        throw new Error('Failed to open login popup');
-      }
-
-      // Listen for the OAuth callback
-      const result = await new Promise<User>((resolve, reject) => {
-        window.addEventListener('message', function handler(event) {
-          if (event.origin !== window.location.origin) return;
-          if (event.data.type === 'github-oauth-success') {
-            window.removeEventListener('message', handler);
-            resolve(event.data.user);
-          }
-          if (event.data.type === 'github-oauth-error') {
-            window.removeEventListener('message', handler);
-            reject(new Error(event.data.error));
-          }
-        });
-      });
-
-      setUser(result);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'GitHub login failed');
-      throw err;
-    }
+  const setTokens = (accessToken: string, refreshToken: string) => {
+    // Store tokens securely (e.g., in httpOnly cookies)
+    // This might not be needed if your backend already sets the cookies
+    // But you might want to store them in memory for API calls
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
   };
 
   const logout = async () => {
     try {
       setError(null);
-      await fetch('/api/auth/logout', {
+      await fetch(API_ROUTES.AUTH.LOGOUT, {
         method: 'POST',
         credentials: 'include',
       });
       setUser(null);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Logout failed');
       throw err;
@@ -120,7 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signup = async (email: string, password: string, username: string) => {
     try {
       setError(null);
-      const response = await fetch('/api/auth/signup', {
+      const response = await fetch(API_ROUTES.AUTH.SIGNUP, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -143,7 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const resetPassword = async (email: string) => {
     try {
       setError(null);
-      const response = await fetch('/api/auth/reset-password', {
+      const response = await fetch(API_ROUTES.AUTH.RESET_PASSWORD, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -168,6 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     logout,
     signup,
     resetPassword,
+    setTokens,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

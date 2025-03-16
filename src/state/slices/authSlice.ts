@@ -58,7 +58,7 @@ export const loginWithGithub = createAsyncThunk(
       const left = window.screenX + (window.outerWidth - width) / 2;
       const top = window.screenY + (window.outerHeight - height) / 2;
       const popup = window.open(
-        API_ROUTES.AUTH.GITHUB,
+        `${API_ROUTES.AUTH.GITHUB}`,
         'github-oauth',
         `width=${width},height=${height},left=${left},top=${top}`
       );

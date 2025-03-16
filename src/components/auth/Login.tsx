@@ -2,9 +2,10 @@ import { useState, FormEvent } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../state/store';
-import { login, loginWithGithub, clearError } from '../../state/slices/authSlice';
+import { login, clearError } from '../../state/slices/authSlice';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { useAuth } from '../../state/AuthContext';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ export function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const error = useSelector((state: RootState) => state.auth.error) || undefined;
+  const { loginWithGithub } = useAuth();
 
   const from = location.state?.from?.pathname || '/';
 
@@ -33,10 +35,10 @@ export function Login() {
   const handleGithubLogin = async () => {
     setIsLoading(true);
     try {
-      await dispatch(loginWithGithub()).unwrap();
+      await loginWithGithub();
       navigate(from, { replace: true });
     } catch (err) {
-      // Error is handled by the slice
+      // Error is handled by the context
     } finally {
       setIsLoading(false);
     }
